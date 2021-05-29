@@ -4,7 +4,7 @@ services:
     image: akhilrex/hammond
     container_name: hammond
     environment:
-      - CHECK_FREQUENCY=240
+      - JWT_SECRET = somethingverystrong
     volumes:
       - /path/to/config:/config
       - /path/to/data:/assets
