@@ -110,7 +110,7 @@ services:
       - /path/to/config:/config
       - /path/to/data:/assets
     ports:
-      - 8080:8080
+      - 3000:3000
     restart: unless-stopped
 ```
 
@@ -187,7 +187,7 @@ Project Link: [https://github.com/akhilrex/hammond](https://github.com/akhilrex/
 [issues-shield]: https://img.shields.io/github/issues/akhilrex/hammond.svg?style=flat-square
 [issues-url]: https://github.com/akhilrex/hammond/issues
 [license-shield]: https://img.shields.io/github/license/akhilrex/hammond.svg?style=flat-square
-[license-url]: https://github.com/akhilrex/hammond/blob/master/LICENSE.txt
+[license-url]: https://github.com/akhilrex/hammond/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/akhilrex
 [product-screenshot]: images/screenshot.jpg
