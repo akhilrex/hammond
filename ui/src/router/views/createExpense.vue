@@ -178,7 +178,6 @@ export default {
           v-model="expenseModel.date"
           placeholder="Click to select..."
           icon="calendar"
-          trap-focus
           :max-date="new Date()"
         >
         </b-datepicker>
