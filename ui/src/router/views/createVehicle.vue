@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     getEmptyVehicle(veh) {
-      if (!veh.id) {
+      if (!veh || !veh.id) {
         return {
           fuelUnit: null,
           fuelType: null,

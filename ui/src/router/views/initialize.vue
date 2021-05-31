@@ -226,7 +226,7 @@ export default {
             v-model="registerModel.password"
             type="password"
             required
-            minlength="6"
+            minlength="8"
             password-reveal
           ></b-input>
         </b-field>

@@ -5,6 +5,7 @@ import appConfig from '@src/app.config'
 import Layout from '@layouts/main.vue'
 import CreateQuickEntry from '@components/createQuickEntry.vue'
 import StatsWidget from '@components/statsWidget.vue'
+import { chunk } from 'lodash'
 
 import { parseAndFormatDate } from '@utils/format-date'
 // import store from '@state/store'
@@ -35,6 +36,9 @@ export default {
     ...mapState('vehicles', ['vehicles']),
     ...mapState('utils', ['isMobile']),
     ...mapGetters('vehicles', ['unprocessedQuickEntries']),
+    chunkedVehicles() {
+      return chunk(this.myVehicles, 3)
+    },
   },
   watch: {
     vehicles(old, newOne) {
@@ -103,8 +107,9 @@ export default {
         </div></div
       >
 
-      <div v-if="myVehicles.length" class="columns">
-        <div v-for="vehicle in myVehicles" :key="vehicle.id" class="column is-4">
+      <div v-if="myVehicles.length">
+  <div v-for="chunk,index in chunkedVehicles" :key="index"  class="columns">
+        <div v-for="vehicle in chunk" :key="vehicle.id" class="column is-4">
           <b-collapse animation="slide" aria-id="contentIdForA11y3" class="card" :open="!isMobile">
             <template v-slot:trigger="props">
               <div class="card-header" role="button" aria-controls="contentIdForA11y3">
@@ -154,6 +159,7 @@ export default {
               </router-link>
             </footer>
           </b-collapse>
+        </div>
         </div>
       </div>
     </section>
