@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/akhilrex/hammond/common"
@@ -14,6 +15,7 @@ func RegisterVehicleController(router *gin.RouterGroup) {
 	router.GET("/vehicles", getAllVehicles)
 	router.GET("/vehicles/:id", getVehicleById)
 	router.PUT("/vehicles/:id", updateVehicle)
+	router.DELETE("/vehicles/:id", deleteVehicle)
 	router.GET("/vehicles/:id/stats", getVehicleStats)
 	router.GET("/vehicles/:id/users", getVehicleUsers)
 	router.POST("/vehicles/:id/users/:subId", shareVehicle)
@@ -361,6 +363,31 @@ func getVehicleUsers(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, model)
+
+	} else {
+		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
+	}
+}
+func deleteVehicle(c *gin.Context) {
+	var searchByIdQuery models.SearchByIdQuery
+
+	if err := c.ShouldBindUri(&searchByIdQuery); err == nil {
+
+		canDelete, err := service.CanDeleteVehicle(searchByIdQuery.Id, c.MustGet("userId").(string))
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, common.NewError("shareVehicle", err))
+			return
+		}
+		if !canDelete {
+			c.JSON(http.StatusUnprocessableEntity, common.NewError("shareVehicle", errors.New("You are not allowed to delete this vehicle.")))
+			return
+		}
+		err = service.DeleteVehicle(searchByIdQuery.Id)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, common.NewError("shareVehicle", err))
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{})
 
 	} else {
 		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))

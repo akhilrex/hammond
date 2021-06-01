@@ -62,7 +62,7 @@ func GetVehicleOwner(vehicleId string) (string, error) {
 	if tx.Error != nil {
 		return "", tx.Error
 	}
-	return mapping.ID, nil
+	return mapping.UserID, nil
 }
 
 func GetVehicleUsers(vehicleId string) (*[]UserVehicle, error) {
@@ -176,6 +176,11 @@ func GetExpenseById(id string) (*Expense, error) {
 	return &obj, result.Error
 }
 
+func DeleteVehicleById(id string) error {
+
+	result := DB.Where("id=?", id).Delete(&Vehicle{})
+	return result.Error
+}
 func DeleteFillupById(id string) error {
 
 	result := DB.Where("id=?", id).Delete(&Fillup{})
@@ -183,6 +188,16 @@ func DeleteFillupById(id string) error {
 }
 func DeleteExpenseById(id string) error {
 	result := DB.Where("id=?", id).Delete(&Expense{})
+	return result.Error
+}
+
+func DeleteFillupByVehicleId(id string) error {
+
+	result := DB.Where("vehicle_id=?", id).Delete(&Fillup{})
+	return result.Error
+}
+func DeleteExpenseByVehicleId(id string) error {
+	result := DB.Where("vehicle_id=?", id).Delete(&Expense{})
 	return result.Error
 }
 

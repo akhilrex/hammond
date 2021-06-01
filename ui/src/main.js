@@ -18,6 +18,8 @@ import {
   faDownload,
   faEye,
   faEyeSlash,
+  faTrash,
+  faShare,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -44,7 +46,9 @@ library.add(
   faExclamationCircle,
   faDownload,
   faEye,
-  faEyeSlash
+  faEyeSlash,
+  faTrash,
+  faShare
 )
 Vue.use(Buefy, {
   defaultIconComponent: 'vue-fontawesome',

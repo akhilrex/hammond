@@ -125,6 +125,32 @@ export default {
         })
         .catch((err) => console.log(err))
     },
+    deleteVehicle() {
+      var sure = confirm(
+        'This will delete all the expenses and fillups related with this vehicle as well. This step cannot be reversed. Are you sure?'
+      )
+      if (sure) {
+        axios
+          .delete(`/api/vehicles/${this.vehicle.id}`)
+          .then((data) => {
+            this.$buefy.toast.open({
+              message: 'Vehicle Deleted Successfully',
+              type: 'is-success',
+              duration: 3000,
+            })
+            this.$router.push('/')
+          })
+          .catch((ex) => {
+            this.$buefy.toast.open({
+              duration: 5000,
+              message: ex.message,
+              position: 'is-bottom',
+              type: 'is-danger',
+            })
+          })
+          .finally(() => {})
+      }
+    },
     addAttachment() {
       if (this.file == null) {
         return
@@ -219,20 +245,26 @@ export default {
         </p>
       </div>
       <div class="column is-one-third buttons has-text-centered">
+        <b-button type="is-primary" tag="router-link" :to="`/vehicles/${vehicle.id}/fillup`">Add Fillup</b-button>
+        <b-button type="is-primary" tag="router-link" :to="`/vehicles/${vehicle.id}/expense`">Add Expense</b-button>
         <b-button
           v-if="vehicle.isOwner"
-          type="is-primary"
           tag="router-link"
+          title="Edit Vehicle"
           :to="{
             name: 'vehicle-edit',
             props: { vehicle: vehicle },
             params: { id: vehicle.id },
           }"
-          >Edit</b-button
         >
-        <b-button type="is-primary" tag="router-link" :to="`/vehicles/${vehicle.id}/fillup`">Add Fillup</b-button>
-        <b-button type="is-primary" tag="router-link" :to="`/vehicles/${vehicle.id}/expense`">Add Expense</b-button>
-        <b-button v-if="vehicle.isOwner" type="is-primary" @click="showShareVehicleModal">Share</b-button>
+          <b-icon pack="fas" icon="edit" type="is-info"> </b-icon
+        ></b-button>
+        <b-button v-if="vehicle.isOwner" title="Share vehicle" @click="showShareVehicleModal">
+          <b-icon pack="fas" icon="share" type="is-info"> </b-icon
+        ></b-button>
+        <b-button v-if="vehicle.isOwner" title="Delete Vehicle" @click="deleteVehicle">
+          <b-icon pack="fas" icon="trash" type="is-danger"> </b-icon
+        ></b-button>
       </div>
     </div>
     <div v-for="(currencyLevel, index) in summaryObject" :key="index" class="level box">

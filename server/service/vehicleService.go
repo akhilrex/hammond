@@ -42,6 +42,20 @@ func GetVehicleOwner(vehicleId string) (string, error) {
 func GetVehicleUsers(vehicleId string) (*[]db.UserVehicle, error) {
 	return db.GetVehicleUsers(vehicleId)
 }
+func CanDeleteVehicle(vehicleId, userId string) (bool, error) {
+	owner, err := db.GetVehicleOwner(vehicleId)
+	if err != nil {
+		return false, err
+	}
+	return owner == userId, nil
+}
+
+func DeleteVehicle(vehicleId string) error {
+	db.DeleteExpenseByVehicleId(vehicleId)
+	db.DeleteFillupByVehicleId(vehicleId)
+	return db.DeleteVehicleById(vehicleId)
+}
+
 func ShareVehicle(vehicleId, userId string) error {
 	return db.ShareVehicle(vehicleId, userId)
 }
