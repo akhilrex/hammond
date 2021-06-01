@@ -69,9 +69,13 @@ export default {
             .catch((err) => console.log('error:', err))
         })
         .catch((ex) => {
+          let errorMessage= ex.message;
+          if(ex.response && ex.response.data?.errors?.changePassword){
+            errorMessage=ex.response.data?.errors?.changePassword
+          }
           this.$buefy.toast.open({
             duration: 5000,
-            message: ex.message,
+            message: errorMessage,
             position: 'is-bottom',
             type: 'is-danger',
           })
@@ -168,7 +172,7 @@ export default {
         <table class="table is-hoverable">
           <tr>
             <td>Current Version</td>
-            <td>2021.05.29</td>
+            <td>2021.06.01</td>
           </tr>
           <tr>
             <td>Website</td>

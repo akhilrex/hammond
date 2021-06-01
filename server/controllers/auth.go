@@ -169,7 +169,7 @@ func changePassword(c *gin.Context) {
 	}
 
 	if user.CheckPassword(request.OldPassword) != nil {
-		c.JSON(http.StatusForbidden, common.NewError("changePassword", errors.New("Not Registered email or invalid password")))
+		c.JSON(http.StatusForbidden, common.NewError("changePassword", errors.New("Incorrect old password")))
 		return
 	}
 

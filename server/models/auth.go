@@ -25,6 +25,6 @@ type RegisterRequest struct {
 }
 
 type ChangePasswordRequest struct {
-	OldPassword string `form:"oldPassword" json:"oldPassword" binding:"required,min=8,max=255"`
+	OldPassword string `form:"oldPassword" json:"oldPassword" binding:"required,max=255"`
 	NewPassword string `form:"newPassword" json:"newPassword" binding:"required,min=8,max=255"`
 }

@@ -8,7 +8,7 @@
   </a> -->
 
   <h1 align="center" style="margin-bottom:0">Hammond</h1>
-  <p align="center">Current Version - 2021.05.29</p>
+  <p align="center">Current Version - 2021.06.01</p>
 
   <p align="center">
     A self-hosted vehicle expense tracking system with support for multiple users.
@@ -55,7 +55,7 @@ The current version of Hammond is written using GO for backend and Vuejs for the
 
 Also I had initially thought of a 2 container approach (1 for backend and 1 for the frontend) so that they can be independently maintained and updated. I eventually decided against this idea for the sake of simplicity. Although it is safe to assume that most self-hosters are fairly tech capable it still is much better to have a single container that you can fire and forget.
 
-![Product Name Screen Shot][product-screenshot] [More Screenshots](Shreenshots.md)
+![Product Name Screen Shot][product-screenshot] [More Screenshots](Screenshots.md)
 
 ### Built With
 

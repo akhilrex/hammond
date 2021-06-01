@@ -195,7 +195,7 @@ export default {
           type="number"
           min="0"
           expanded
-          step=".01"
+          step=".001"
           required
         ></b-input>
       </b-field>

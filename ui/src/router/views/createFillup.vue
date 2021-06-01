@@ -206,7 +206,7 @@ export default {
         <b-input
           v-model.number="fillupModel.fuelQuantity"
           type="number"
-          step=".01"
+          step=".001"
           min="0"
           expanded
           required
@@ -225,7 +225,7 @@ export default {
           v-model.number="fillupModel.perUnitPrice"
           type="number"
           min="0"
-          step=".01"
+          step=".001"
           expanded
           required
         ></b-input>
@@ -238,7 +238,7 @@ export default {
           v-model.number="fillupModel.totalAmount"
           type="number"
           min="0"
-          step=".01"
+          step=".001"
           expanded
           required
         ></b-input>
