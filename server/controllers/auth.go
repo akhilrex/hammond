@@ -73,6 +73,7 @@ func initializeSystem(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 		return
 	}
+	service.UpdateSettings(registerRequest.Currency, *registerRequest.DistanceUnit)
 
 	if err := service.CreateUser(&registerRequest, db.ADMIN); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, common.NewError("initializeSystem", err))
