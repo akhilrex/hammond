@@ -47,6 +47,7 @@ Hammond is a self hosted vehicle management system to track fuel and other expen
 
 _Developers Note: This project is under active development which means I release new updates very frequently. It is recommended that you use something like [watchtower](https://github.com/containrrr/watchtower) which will automatically update your containers whenever I release a new version or periodically rebuild the container with the latest image manually._
 
+__Also check out my other self-hosted, open-source solution - [Podgrab](https://github.com/akhilrex/podgrab) - Podcast download and archive manager and player.__
 ### Motivation and Developer Notes
 
 I was looking for a fuel tracking system and stumbled upon Clarkson. Although it did most of what I needed it has not been updated for quite a lot of time. Since I had some bandwidth available as my previous open source project [Podgrab](http://github.com/akhilrex/podgrab) had become quite stable now, my first thought was to contribute to the Clarkson project only. I soon realized that the architecture that Clarkson had used was not really be that extensible now and would warrant a complete rewrite only. So I decided to build Hammond - The successor to Clarkson.
@@ -118,11 +119,11 @@ services:
    docker-compose up -d
 ```
 
-<!-- ### Build from Source / Ubuntu Installation
+### Build from Source / Ubuntu Installation
 
 Although personally I feel that using the docker container is the best way of using and enjoying something like hammond, a lot of people in the community are still not comfortable with using Docker and wanted to host it natively on their Linux servers. Follow the link below to get a guide on how to build hammond from source.
 
-[Build from source / Ubuntu Guide](docs/ubuntu-install.md) -->
+[Build from source / Ubuntu Guide](docs/ubuntu-install.md)
 
 ### Environment Variables
 
