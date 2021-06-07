@@ -8,7 +8,7 @@
   </a> -->
 
   <h1 align="center" style="margin-bottom:0">Hammond</h1>
-  <p align="center">Current Version - 2021.06.01</p>
+  <p align="center">Current Version - 2021.06.07</p>
 
   <p align="center">
     A self-hosted vehicle expense tracking system with support for multiple users.
@@ -88,13 +88,13 @@ The easiest way to run Hammond is to run it as a docker container.
 Simple setup without mounted volumes (for testing and evaluation)
 
 ```sh
-  docker run -d -p 8080:8080 --name=hammond akhilrex/hammond
+  docker run -d -p 3000:3000 --name=hammond akhilrex/hammond
 ```
 
 Binding local volumes to the container
 
 ```sh
-   docker run -d -p 8080:8080 --name=hammond -v "/host/path/to/assets:/assets" -v "/host/path/to/config:/config"  akhilrex/hammond
+   docker run -d -p 3000:3000 --name=hammond -v "/host/path/to/assets:/assets" -v "/host/path/to/config:/config"  akhilrex/hammond
 ```
 
 ### Using Docker-Compose
