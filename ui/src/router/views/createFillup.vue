@@ -32,6 +32,7 @@ export default {
       showMore: false,
       quickEntry: null,
       myVehicles: [],
+      users: [],
       selectedVehicle: this.vehicle,
       fillupModel: this.fillup,
       processQuickEntry: false,
@@ -47,16 +48,10 @@ export default {
   },
   watch: {
     'fillupModel.fuelQuantity': function(old, newOne) {
-      this.fillupModel.totalAmount = round(
-        this.fillupModel.fuelQuantity * this.fillupModel.perUnitPrice,
-        2
-      )
+      this.fillupModel.totalAmount = round(this.fillupModel.fuelQuantity * this.fillupModel.perUnitPrice, 2)
     },
     'fillupModel.perUnitPrice': function(old, newOne) {
-      this.fillupModel.totalAmount = round(
-        this.fillupModel.fuelQuantity * this.fillupModel.perUnitPrice,
-        2
-      )
+      this.fillupModel.totalAmount = round(this.fillupModel.fuelQuantity * this.fillupModel.perUnitPrice, 2)
     },
     quickEntry: function(newOne, old) {
       if (old == null && newOne !== null) {
@@ -67,11 +62,21 @@ export default {
   mounted() {
     this.myVehicles = this.vehicles
     this.selectedVehicle = this.vehicle
+    this.fetchVehicleUsers()
     if (!this.fillup.id) {
       this.fillupModel = this.getEmptyFillup()
+      this.fillupModel.userId = this.me.id
     }
   },
   methods: {
+    fetchVehicleUsers() {
+      store
+        .dispatch('vehicles/fetchUsersByVehicleId', { vehicleId: this.selectedVehicle.id })
+        .then((data) => {
+          this.users = data
+        })
+        .catch((err) => console.log(err))
+    },
     getEmptyFillup() {
       return {
         vehicleId: this.selectedVehicle.id,
@@ -85,18 +90,16 @@ export default {
         date: new Date(),
         fillingStation: '',
         comments: '',
+        userId: '',
       }
     },
     async createFillup() {
       this.tryingToCreate = true
       this.fillupModel.vehicleId = this.selectedVehicle.id
-      this.fillupModel.userId = this.me.id
+      //  this.fillupModel.userId = this.me.id
       if (this.fillup.id) {
         axios
-          .put(
-            `/api/vehicles/${this.selectedVehicle.id}/fillups/${this.fillup.id}`,
-            this.fillupModel
-          )
+          .put(`/api/vehicles/${this.selectedVehicle.id}/fillups/${this.fillup.id}`, this.fillupModel)
           .then((data) => {
             this.$buefy.toast.open({
               message: 'Fillup Updated Successfully',
@@ -105,11 +108,9 @@ export default {
             })
             this.fillupModel = this.getEmptyFillup()
             if (this.processQuickEntry) {
-              store
-                .dispatch('vehicles/setQuickEntryAsProcessed', { id: this.quickEntry.id })
-                .then((data) => {
-                  this.quickEntry = null
-                })
+              store.dispatch('vehicles/setQuickEntryAsProcessed', { id: this.quickEntry.id }).then((data) => {
+                this.quickEntry = null
+              })
             }
           })
           .catch((ex) => {
@@ -134,9 +135,7 @@ export default {
             })
             this.fillupModel = this.getEmptyFillup()
             if (this.processQuickEntry) {
-              store
-                .dispatch('vehicles/setQuickEntryAsProcessed', { id: this.quickEntry.id })
-                .then((data) => {})
+              store.dispatch('vehicles/setQuickEntryAsProcessed', { id: this.quickEntry.id }).then((data) => {})
             }
           })
           .catch((ex) => {
@@ -163,14 +162,7 @@ export default {
         <div class="column is-two-thirds">
           <h1 class="title">Create Fillup</h1>
           <h1 class="subtitle">
-            {{
-              [
-                selectedVehicle.nickname,
-                selectedVehicle.registration,
-                selectedVehicle.make,
-                selectedVehicle.model,
-              ].join(' | ')
-            }}
+            {{ [selectedVehicle.nickname, selectedVehicle.registration, selectedVehicle.make, selectedVehicle.model].join(' | ') }}
           </h1>
         </div>
         <div class="column is-one-thirds">
@@ -180,37 +172,24 @@ export default {
     </div>
     <form class="" @submit.prevent="createFillup">
       <b-field label="Select a vehicle">
-        <b-select
-          v-model="selectedVehicle"
-          placeholder="Vehicle"
-          required
-          expanded
-          :disabled="fillup.id"
-        >
+        <b-select v-model="selectedVehicle" placeholder="Vehicle" required expanded :disabled="fillup.id">
           <option v-for="option in myVehicles" :key="option.id" :value="option">
             {{ option.nickname }}
           </option>
         </b-select>
       </b-field>
+      <b-field label="Expense by">
+        <b-select v-model="fillupModel.userId" placeholder="User" required expanded :disabled="fillup.id">
+          <option v-for="option in users" :key="option.userId" :value="option.userId">
+            {{ option.name }}
+          </option>
+        </b-select>
+      </b-field>
       <b-field label="Fillup Date">
-        <b-datepicker
-          v-model="fillupModel.date"
-          placeholder="Click to select..."
-          icon="calendar"
-          trap-focus
-          :max-date="new Date()"
-        >
-        </b-datepicker>
+        <b-datepicker v-model="fillupModel.date" placeholder="Click to select..." icon="calendar" trap-focus :max-date="new Date()"> </b-datepicker>
       </b-field>
       <b-field label="Quantity*" addons>
-        <b-input
-          v-model.number="fillupModel.fuelQuantity"
-          type="number"
-          step=".001"
-          min="0"
-          expanded
-          required
-        ></b-input>
+        <b-input v-model.number="fillupModel.fuelQuantity" type="number" step=".001" min="0" expanded required></b-input>
         <b-select v-model="fillupModel.fuelUnit" placeholder="Fuel Unit" required>
           <option v-for="(option, key) in fuelUnitMasters" :key="key" :value="key">
             {{ option.long }}
@@ -221,47 +200,25 @@ export default {
         ><p class="control">
           <span class="button is-static">{{ me.currency }}</span>
         </p>
-        <b-input
-          v-model.number="fillupModel.perUnitPrice"
-          type="number"
-          min="0"
-          step=".001"
-          expanded
-          required
-        ></b-input>
+        <b-input v-model.number="fillupModel.perUnitPrice" type="number" min="0" step=".001" expanded required></b-input>
       </b-field>
       <b-field label="Total Amount Paid">
         <p class="control">
           <span class="button is-static">{{ me.currency }}</span>
         </p>
-        <b-input
-          v-model.number="fillupModel.totalAmount"
-          type="number"
-          min="0"
-          step=".001"
-          expanded
-          required
-        ></b-input>
+        <b-input v-model.number="fillupModel.totalAmount" type="number" min="0" step=".001" expanded required></b-input>
       </b-field>
       <b-field label="Odometer Reading">
         <p class="control">
           <span class="button is-static">{{ me.distanceUnitDetail.short }}</span>
         </p>
-        <b-input
-          v-model.number="fillupModel.odoReading"
-          type="number"
-          min="0"
-          expanded
-          required
-        ></b-input>
+        <b-input v-model.number="fillupModel.odoReading" type="number" min="0" expanded required></b-input>
       </b-field>
       <b-field>
         <b-checkbox v-model="fillupModel.isTankFull">Did you get a full tank?</b-checkbox>
       </b-field>
       <b-field>
-        <b-checkbox v-model="fillupModel.hasMissedFillup"
-          >Did you miss the fillup entry before this one?</b-checkbox
-        >
+        <b-checkbox v-model="fillupModel.hasMissedFillup">Did you miss the fillup entry before this one?</b-checkbox>
       </b-field>
       <b-field>
         <b-switch v-model="showMore">Fill more details</b-switch>
@@ -275,21 +232,11 @@ export default {
         </b-field>
       </fieldset>
       <b-field>
-        <b-switch v-if="quickEntry" v-model="processQuickEntry"
-          >Mark selected Quick Entry as processed</b-switch
-        >
+        <b-switch v-if="quickEntry" v-model="processQuickEntry">Mark selected Quick Entry as processed</b-switch>
       </b-field>
       <br />
       <b-field>
-        <b-button
-          tag="input"
-          native-type="submit"
-          :disabled="tryingToCreate"
-          type="is-primary"
-          label="Create Fillup"
-          expanded
-        >
-        </b-button>
+        <b-button tag="input" native-type="submit" :disabled="tryingToCreate" type="is-primary" label="Create Fillup" expanded> </b-button>
         <p v-if="authError">
           There was an error logging in to your account.
         </p>

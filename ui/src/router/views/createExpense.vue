@@ -29,6 +29,7 @@ export default {
       showMore: false,
       quickEntry: null,
       myVehicles: [],
+      users: [],
       selectedVehicle: this.vehicle,
       expenseModel: this.expense,
       processQuickEntry: false,
@@ -53,8 +54,10 @@ export default {
   mounted() {
     this.myVehicles = this.vehicles
     this.selectedVehicle = this.vehicle
+    this.fetchVehicleUsers()
     if (!this.expense.id) {
       this.expenseModel = this.getEmptyExpense()
+      this.expenseModel.userId = this.me.id
     }
   },
   methods: {
@@ -66,20 +69,25 @@ export default {
         odoReading: '',
         date: new Date(),
         comments: '',
+        userId: '',
       }
     },
-
+    fetchVehicleUsers() {
+      store
+        .dispatch('vehicles/fetchUsersByVehicleId', { vehicleId: this.selectedVehicle.id })
+        .then((data) => {
+          this.users = data
+        })
+        .catch((err) => console.log(err))
+    },
     createExpense() {
       this.tryingToCreate = true
       this.expenseModel.vehicleId = this.selectedVehicle.id
-      this.expenseModel.userId = this.me.id
+      //   this.expenseModel.userId = this.me.id
 
       if (this.expense.id) {
         axios
-          .put(
-            `/api/vehicles/${this.selectedVehicle.id}/expenses/${this.expense.id}`,
-            this.expenseModel
-          )
+          .put(`/api/vehicles/${this.selectedVehicle.id}/expenses/${this.expense.id}`, this.expenseModel)
           .then((data) => {
             this.$buefy.toast.open({
               message: 'Expense Updated Successfully',
@@ -88,9 +96,7 @@ export default {
             })
             this.expenseModel = this.getEmptyExpense()
             if (this.processQuickEntry) {
-              store
-                .dispatch('vehicles/setQuickEntryAsProcessed', { id: this.quickEntry.id })
-                .then((data) => {})
+              store.dispatch('vehicles/setQuickEntryAsProcessed', { id: this.quickEntry.id }).then((data) => {})
             }
           })
           .catch((ex) => {
@@ -115,11 +121,9 @@ export default {
             })
             this.expenseModel = this.getEmptyExpense()
             if (this.processQuickEntry) {
-              store
-                .dispatch('vehicles/setQuickEntryAsProcessed', { id: this.quickEntry.id })
-                .then((data) => {
-                  this.quickEntry = null
-                })
+              store.dispatch('vehicles/setQuickEntryAsProcessed', { id: this.quickEntry.id }).then((data) => {
+                this.quickEntry = null
+              })
             }
           })
           .catch((ex) => {
@@ -145,14 +149,7 @@ export default {
       <div class="column is-two-thirds">
         <h1 class="title">Create Expense</h1>
         <h1 class="subtitle">
-          {{
-            [
-              selectedVehicle.nickname,
-              selectedVehicle.registration,
-              selectedVehicle.make,
-              selectedVehicle.model,
-            ].join(' | ')
-          }}
+          {{ [selectedVehicle.nickname, selectedVehicle.registration, selectedVehicle.make, selectedVehicle.model].join(' | ') }}
         </h1>
       </div>
       <div class="column is-one-thirds">
@@ -161,26 +158,21 @@ export default {
     </div>
     <form @submit.prevent="createExpense">
       <b-field label="Select a vehicle">
-        <b-select
-          v-model="selectedVehicle"
-          placeholder="Vehicle"
-          required
-          expanded
-          :disabled="expense.id"
-        >
+        <b-select v-model="selectedVehicle" placeholder="Vehicle" required expanded :disabled="expense.id">
           <option v-for="option in myVehicles" :key="option.id" :value="option">
             {{ option.nickname }}
           </option>
         </b-select>
       </b-field>
+      <b-field label="Expense by">
+        <b-select v-model="expenseModel.userId" placeholder="User" required expanded :disabled="expense.id">
+          <option v-for="option in users" :key="option.userId" :value="option.userId">
+            {{ option.name }}
+          </option>
+        </b-select>
+      </b-field>
       <b-field label="Expense Date">
-        <b-datepicker
-          v-model="expenseModel.date"
-          placeholder="Click to select..."
-          icon="calendar"
-          :max-date="new Date()"
-        >
-        </b-datepicker>
+        <b-datepicker v-model="expenseModel.date" placeholder="Click to select..." icon="calendar" :max-date="new Date()"> </b-datepicker>
       </b-field>
       <b-field label="Expense Type*">
         <b-input v-model="expenseModel.expenseType" expanded required></b-input>
@@ -190,26 +182,13 @@ export default {
         <p class="control">
           <span class="button is-static">{{ me.currency }}</span>
         </p>
-        <b-input
-          v-model.number="expenseModel.amount"
-          type="number"
-          min="0"
-          expanded
-          step=".001"
-          required
-        ></b-input>
+        <b-input v-model.number="expenseModel.amount" type="number" min="0" expanded step=".001" required></b-input>
       </b-field>
       <b-field label="Odometer Reading">
         <p class="control">
           <span class="button is-static">{{ me.distanceUnitDetail.short }}</span>
         </p>
-        <b-input
-          v-model.number="expenseModel.odoReading"
-          type="number"
-          min="0"
-          expanded
-          required
-        ></b-input>
+        <b-input v-model.number="expenseModel.odoReading" type="number" min="0" expanded required></b-input>
       </b-field>
 
       <b-field>
@@ -221,21 +200,11 @@ export default {
         </b-field>
       </fieldset>
       <b-field>
-        <b-switch v-if="quickEntry" v-model="processQuickEntry"
-          >Mark selected Quick Entry as processed</b-switch
-        >
+        <b-switch v-if="quickEntry" v-model="processQuickEntry">Mark selected Quick Entry as processed</b-switch>
       </b-field>
       <br />
       <b-field>
-        <b-button
-          tag="input"
-          native-type="submit"
-          :disabled="tryingToCreate"
-          type="is-primary"
-          label="Create Expense"
-          expanded
-        >
-        </b-button>
+        <b-button tag="input" native-type="submit" :disabled="tryingToCreate" type="is-primary" label="Create Expense" expanded> </b-button>
       </b-field>
     </form>
   </Layout>
