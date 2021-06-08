@@ -8,7 +8,7 @@
   </a> -->
 
   <h1 align="center" style="margin-bottom:0">Hammond</h1>
-  <p align="center">Current Version - 2021.06.07</p>
+  <p align="center">Current Version - 2021.06.08</p>
 
   <p align="center">
     A self-hosted vehicle expense tracking system with support for multiple users.
