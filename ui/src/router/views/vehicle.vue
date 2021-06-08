@@ -81,19 +81,8 @@ export default {
     },
   },
   mounted() {
-    axios
-      .get(`/api/vehicles/${this.vehicle.id}/fillups`)
-      .then((response) => {
-        this.fillups = response.data
-      })
-      .catch((err) => console.log(err))
-
-    axios
-      .get(`/api/vehicles/${this.vehicle.id}/expenses`)
-      .then((response) => {
-        this.expenses = response.data
-      })
-      .catch((err) => console.log(err))
+    this.fetchFillups()
+    this.fetchExpenses()
 
     this.fetchAttachments()
     this.fetchVehicleStats()
@@ -105,6 +94,22 @@ export default {
         .dispatch('vehicles/fetchAttachmentsByVehicleId', { vehicleId: this.vehicle.id })
         .then((data) => {
           this.attachments = data
+        })
+        .catch((err) => console.log(err))
+    },
+    fetchFillups() {
+      axios
+        .get(`/api/vehicles/${this.vehicle.id}/fillups`)
+        .then((response) => {
+          this.fillups = response.data
+        })
+        .catch((err) => console.log(err))
+    },
+    fetchExpenses() {
+      axios
+        .get(`/api/vehicles/${this.vehicle.id}/expenses`)
+        .then((response) => {
+          this.expenses = response.data
         })
         .catch((err) => console.log(err))
     },
@@ -124,6 +129,30 @@ export default {
           this.users = data
         })
         .catch((err) => console.log(err))
+    },
+    deleteFillup(fillupId) {
+      var sure = confirm('This will delete this fillup. This step cannot be reversed. Are you sure?')
+      if (sure) {
+        store
+          .dispatch('vehicles/deleteFillupById', { vehicleId: this.vehicle.id, fillupId: fillupId })
+          .then((data) => {
+            this.fetchVehicleStats()
+            this.fetchFillups()
+          })
+          .catch((err) => console.log(err))
+      }
+    },
+    deleteExpense(expenseId) {
+      var sure = confirm('This will delete this expense. This step cannot be reversed. Are you sure?')
+      if (sure) {
+        store
+          .dispatch('vehicles/deleteExpenseById', { vehicleId: this.vehicle.id, expenseId: expenseId })
+          .then((data) => {
+            this.fetchVehicleStats()
+            this.fetchExpenses()
+          })
+          .catch((err) => console.log(err))
+      }
     },
     deleteVehicle() {
       var sure = confirm(
@@ -326,6 +355,9 @@ export default {
           >
             <b-icon pack="fas" icon="edit" type="is-info"> </b-icon
           ></b-button>
+          <b-button type="is-ghost" title="Delete this fillup" @click="deleteFillup(props.row.id)">
+            <b-icon pack="fas" icon="trash" type="is-danger"> </b-icon
+          ></b-button>
         </b-table-column>
         <template v-slot:empty> No Fillups so far</template>
         <template v-slot:detail="props">
@@ -367,6 +399,9 @@ export default {
             }"
           >
             <b-icon pack="fas" icon="edit" type="is-info"> </b-icon
+          ></b-button>
+          <b-button type="is-ghost" title="Delete this expense" @click="deleteExpense(props.row.id)">
+            <b-icon pack="fas" icon="trash" type="is-danger"> </b-icon
           ></b-button>
         </b-table-column>
         <template v-slot:empty> No Expenses so far</template>

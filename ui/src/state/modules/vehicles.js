@@ -105,10 +105,22 @@ export const actions = {
       return data
     })
   },
+  deleteFillupById({ commit, state, rootState }, { vehicleId, fillupId }) {
+    return axios.delete(`/api/vehicles/${vehicleId}/fillups/${fillupId}`).then((response) => {
+      const data = response.data
+      return data
+    })
+  },
   fetchExpenseById({ commit, state, rootState }, { vehicleId, expenseId }) {
     return axios.get(`/api/vehicles/${vehicleId}/expenses/${expenseId}`).then((response) => {
       const data = response.data
       data.date = parseISO(data.date)
+      return data
+    })
+  },
+  deleteExpenseById({ commit, state, rootState }, { vehicleId, expenseId }) {
+    return axios.delete(`/api/vehicles/${vehicleId}/expenses/${expenseId}`).then((response) => {
+      const data = response.data
       return data
     })
   },
