@@ -102,6 +102,11 @@ func userLogin(c *gin.Context) {
 		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("Not Registered email or invalid password")))
 		return
 	}
+
+	if user.IsDisabled {
+		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("Your user has been disabled by the admin. Please contact them to get it re-enabled.")))
+		return
+	}
 	UpdateContextUserModel(c, user.ID)
 	token, refreshToken := common.GenToken(user.ID, user.Role)
 	response := models.LoginResponse{

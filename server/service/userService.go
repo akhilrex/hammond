@@ -45,3 +45,6 @@ func UpdatePassword(id, password string) (bool, error) {
 	}
 	return true, nil
 }
+func SetDisabledStatusForUser(userId string, isDisabled bool) error {
+	return db.SetDisabledStatusForUser(userId, isDisabled)
+}

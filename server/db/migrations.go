@@ -14,10 +14,10 @@ type localMigration struct {
 }
 
 var migrations = []localMigration{
-	// {
-	// 	Name:  "2020_11_03_04_42_SetDefaultDownloadStatus",
-	// 	Query: "update podcast_items set download_status=2 where download_path!='' and download_status=0",
-	// },
+	{
+		Name:  "2021_06_24_04_42_SetUserDisabledFalse",
+		Query: "update users set is_disabled=0",
+	},
 }
 
 func RunMigrations() {

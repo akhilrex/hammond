@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/akhilrex/hammond/db"
 	"github.com/akhilrex/hammond/models"
 	"gorm.io/gorm/clause"
@@ -58,6 +60,17 @@ func DeleteVehicle(vehicleId string) error {
 
 func ShareVehicle(vehicleId, userId string) error {
 	return db.ShareVehicle(vehicleId, userId)
+}
+func TransferVehicle(vehicleId, ownerId, newUserID string) error {
+	vehicleOwnerId, err := GetVehicleOwner(vehicleId)
+	if err != nil {
+		return err
+	}
+	if vehicleOwnerId != ownerId {
+		return fmt.Errorf("Only vehicle owner can transfer the vehicle")
+	}
+
+	return db.TransferVehicle(vehicleId, ownerId, newUserID)
 }
 func UnshareVehicle(vehicleId, userId string) error {
 	return db.UnshareVehicle(vehicleId, userId)

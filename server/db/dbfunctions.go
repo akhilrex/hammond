@@ -33,6 +33,11 @@ func FindOneUser(condition interface{}) (User, error) {
 	err := DB.Where(condition).First(&model).Error
 	return model, err
 }
+func SetDisabledStatusForUser(userId string, isDisabled bool) error {
+	//Cannot do this for admin
+	tx := DB.Debug().Model(&User{}).Where("id= ? and role=?", userId, USER).Update("is_disabled", isDisabled)
+	return tx.Error
+}
 func GetAllUsers() (*[]User, error) {
 
 	sorting := "created_at desc"
@@ -91,6 +96,16 @@ func ShareVehicle(vehicleId, userId string) error {
 		return tx.Error
 	}
 	return nil
+}
+func TransferVehicle(vehicleId, ownerId, newUserID string) error {
+
+	tx := DB.Model(&UserVehicle{}).Where("vehicle_id = ? AND user_id = ?", vehicleId, ownerId).Update("is_owner", false)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	tx = DB.Model(&UserVehicle{}).Where("vehicle_id = ? AND user_id = ?", vehicleId, newUserID).Update("is_owner", true)
+
+	return tx.Error
 }
 
 func UnshareVehicle(vehicleId, userId string) error {

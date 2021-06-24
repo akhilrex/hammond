@@ -16,6 +16,7 @@ export default {
       password: '',
       authError: null,
       tryingToLogIn: false,
+      errorMessage:''
     }
   },
   computed: {
@@ -37,6 +38,7 @@ export default {
     // and password they provided.
     tryToLogIn() {
       this.tryingToLogIn = true
+      this.errorMessage='';
       // Reset the authError if it existed.
       this.authError = null
       return this.logIn({
@@ -51,6 +53,9 @@ export default {
           // Redirect to the originally requested page, or to the home page
         })
         .catch((error) => {
+         if(error.response.data?.errors?.login){
+           this.errorMessage=error.response.data.errors.login
+         }
           this.tryingToLogIn = false
           this.authError = error
         })
@@ -85,7 +90,7 @@ export default {
         </span>
       </b-button>
       <p v-if="authError">
-        There was an error logging in to your account.
+        There was an error logging in to your account. {{errorMessage}}
       </p>
     </form>
   </Layout>

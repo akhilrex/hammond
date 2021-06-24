@@ -53,6 +53,36 @@ export default {
     formatDate(date) {
       return parseAndFormatDate(date)
     },
+    changeDisabledStatus(userId,status){
+        this.$buefy.dialog.confirm({
+        title: status?'Disable User':"Enable User",
+        message: 'Are you sure you want to do this?',
+        cancelText: 'Cancel',
+        confirmText: 'Go Ahead',
+        onConfirm: () => {
+
+          var url = `/api/users/${userId}/${status?"disable":"enable"}`
+          axios
+            .post(url, {})
+            .then((data) => {
+              this.$buefy.toast.open({
+                message: status?"User disabled successfully":'User enabled successfully',
+                type: 'is-success',
+                duration: 3000,
+              })
+             this.getUsers();
+            })
+            .catch((ex) => {
+              this.$buefy.toast.open({
+                duration: 5000,
+                message: ex.message,
+                position: 'is-bottom',
+                type: 'is-danger',
+              })
+            })
+        },
+      })
+    },
     resetUserForm() {
       this.registerModel = {
         name: '',
@@ -157,7 +187,7 @@ export default {
           </div>
         </form>
       </div>
-      <b-table :data="users" hoverable mobile-cards detail-key="id" paginated per-page="10">
+      <b-table :data="users" hoverable mobile-cards detail-key="id" paginated per-page="10" :row-class="(row, index) => row.isDisabled && 'is-disabled'">
         <b-table-column v-slot="props" field="name" label="Name">
           {{ `${props.row.name}` }} <template v-if="props.row.id === user.id">(You)</template>
         </b-table-column>
@@ -170,6 +200,10 @@ export default {
         <b-table-column v-slot="props" field="createdAt" label="Created" sortable date>
           {{ formatDate(props.row.createdAt) }}
         </b-table-column>
+         <b-table-column v-slot="props">
+           <b-button type="is-success" v-if="props.row.isDisabled && props.row.roleDetail.long === 'USER'" @click="changeDisabledStatus(props.row.id, false)">Enable</b-button>
+            <b-button type="is-danger" v-if="!props.row.isDisabled && props.row.roleDetail.long === 'USER'" @click="changeDisabledStatus(props.row.id, true)">Disable</b-button>
+         </b-table-column>
       </b-table>
     </div>
   </Layout>

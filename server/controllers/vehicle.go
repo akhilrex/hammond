@@ -20,6 +20,7 @@ func RegisterVehicleController(router *gin.RouterGroup) {
 	router.GET("/vehicles/:id/users", getVehicleUsers)
 	router.POST("/vehicles/:id/users/:subId", shareVehicle)
 	router.DELETE("/vehicles/:id/users/:subId", unshareVehicle)
+	router.POST("/vehicles/:id/users/:subId/transfer", transferVehicle)
 
 	router.GET("/me/vehicles", getMyVehicles)
 	router.GET("/me/stats", getMystats)
@@ -399,6 +400,22 @@ func shareVehicle(c *gin.Context) {
 	if err := c.ShouldBindUri(&searchByIdQuery); err == nil {
 
 		err := service.ShareVehicle(searchByIdQuery.Id, searchByIdQuery.SubId)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, common.NewError("shareVehicle", err))
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{})
+
+	} else {
+		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
+	}
+}
+func transferVehicle(c *gin.Context) {
+	var searchByIdQuery models.SubItemQuery
+
+	if err := c.ShouldBindUri(&searchByIdQuery); err == nil {
+
+		err := service.TransferVehicle(searchByIdQuery.Id, c.MustGet("userId").(string), searchByIdQuery.SubId)
 		if err != nil {
 			c.JSON(http.StatusUnprocessableEntity, common.NewError("shareVehicle", err))
 			return

@@ -289,7 +289,7 @@ export default {
           <b-icon pack="fas" icon="edit" type="is-info"> </b-icon
         ></b-button>
         <b-button v-if="vehicle.isOwner" title="Share vehicle" @click="showShareVehicleModal">
-          <b-icon pack="fas" icon="share" type="is-info"> </b-icon
+          <b-icon pack="fas" icon="user-friends" type="is-info"> </b-icon
         ></b-button>
         <b-button v-if="vehicle.isOwner" title="Delete Vehicle" @click="deleteVehicle">
           <b-icon pack="fas" icon="trash" type="is-danger"> </b-icon
