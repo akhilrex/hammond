@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"io/ioutil"
 	"net/http"
 	"os"
 
@@ -114,6 +115,18 @@ func getAttachmentFile(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 	}
+}
+
+func getFileBytes(c *gin.Context, fileVariable string) ([]byte, error) {
+	if fileVariable == "" {
+		fileVariable = "file"
+	}
+	formFile, err := c.FormFile(fileVariable)
+	if err != nil {
+		return nil, err
+	}
+	openedFile, _ := formFile.Open()
+	return ioutil.ReadAll(openedFile)
 }
 
 func saveUploadedFile(c *gin.Context, fileVariable string) (*db.Attachment, error) {
