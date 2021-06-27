@@ -78,6 +78,7 @@ Also I had initially thought of a 2 container approach (1 for backend and 1 for 
 - Save attachment against vehicles
 - Quick Entries (take a photo of a receipt or pump screen to make entry later)
 - Vehicle level and overall reporting
+- Import from Fuelly (more apps coming soon)
 
 ## Installation
 
