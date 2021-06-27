@@ -172,7 +172,7 @@ export default {
         <table class="table is-hoverable">
           <tr>
             <td>Current Version</td>
-            <td>2021.06.24</td>
+            <td>2021.06.27</td>
           </tr>
           <tr>
             <td>Website</td>
