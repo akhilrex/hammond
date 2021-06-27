@@ -139,6 +139,7 @@ func CreateFillup(model models.CreateFillupRequest) (*db.Fillup, error) {
 		Date:            model.Date,
 		Currency:        user.Currency,
 		DistanceUnit:    user.DistanceUnit,
+		Source:          "API",
 	}
 
 	tx := db.DB.Create(&fillup)
@@ -166,6 +167,7 @@ func CreateExpense(model models.CreateExpenseRequest) (*db.Expense, error) {
 		Date:         model.Date,
 		Currency:     user.Currency,
 		DistanceUnit: user.DistanceUnit,
+		Source:       "API",
 	}
 
 	tx := db.DB.Create(&expense)

@@ -19,10 +19,10 @@ export default {
           title: () => 'Quick Entries',
           badge: () => this.unprocessedQuickEntries.length,
         },
-        // {
-        //   name: 'profile',
-        //   title: () => 'Logged in as ' + this.currentUser.name,
-        // },
+        {
+          name: 'import',
+          title: () => 'Import',
+        },
         {
           name: 'settings',
           title: 'Settings',

@@ -117,6 +117,7 @@ type Fillup struct {
 	Date            time.Time    `json:"date"`
 	Currency        string       `json:"currency"`
 	DistanceUnit    DistanceUnit `json:"distanceUnit"`
+	Source          string       `json:"source"`
 }
 
 func (v *Fillup) FuelUnitDetail() EnumDetail {
@@ -145,6 +146,7 @@ type Expense struct {
 	Date         time.Time    `json:"date"`
 	Currency     string       `json:"currency"`
 	DistanceUnit DistanceUnit `json:"distanceUnit"`
+	Source       string       `json:"source"`
 }
 
 type Setting struct {

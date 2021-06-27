@@ -5,30 +5,33 @@ import (
 	"encoding/csv"
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/akhilrex/hammond/db"
 	"github.com/leekchan/accounting"
 )
 
-func FuellyImport(content []byte, userId string) error {
+func FuellyImport(content []byte, userId string) []string {
 	stream := bytes.NewReader(content)
 	reader := csv.NewReader(stream)
 	records, err := reader.ReadAll()
 
+	var errors []string
 	if err != nil {
-		return err
+		errors = append(errors, err.Error())
+		return errors
 	}
 
 	vehicles, err := GetUserVehicles(userId)
 	if err != nil {
-		return err
+		errors = append(errors, err.Error())
+		return errors
 	}
 	user, err := GetUserById(userId)
 
 	if err != nil {
-		return err
+		errors = append(errors, err.Error())
+		return errors
 	}
 
 	var vehicleMap map[string]db.Vehicle = make(map[string]db.Vehicle)
@@ -40,8 +43,6 @@ func FuellyImport(content []byte, userId string) error {
 	var expenses []db.Expense
 	layout := "2006-01-02 15:04"
 	altLayout := "2006-01-02 3:04 PM"
-
-	var errors []string
 
 	for index, record := range records {
 		if index == 0 {
@@ -111,6 +112,7 @@ func FuellyImport(content []byte, userId string) error {
 				Date:           date,
 				Currency:       user.Currency,
 				DistanceUnit:   user.DistanceUnit,
+				Source:         "Fuelly",
 			})
 
 		}
@@ -128,12 +130,13 @@ func FuellyImport(content []byte, userId string) error {
 				Currency:     user.Currency,
 				Date:         date,
 				DistanceUnit: user.DistanceUnit,
+				Source:       "Fuelly",
 			})
 		}
 
 	}
 	if len(errors) != 0 {
-		return fmt.Errorf(strings.Join(errors, "\n"))
+		return errors
 	}
 
 	tx := db.DB.Begin()
@@ -143,15 +146,22 @@ func FuellyImport(content []byte, userId string) error {
 		}
 	}()
 	if err := tx.Error; err != nil {
-		return err
+		errors = append(errors, err.Error())
+		return errors
 	}
 	if err := tx.Create(&fillups).Error; err != nil {
 		tx.Rollback()
-		return err
+		errors = append(errors, err.Error())
+		return errors
 	}
 	if err := tx.Create(&expenses).Error; err != nil {
 		tx.Rollback()
-		return err
+		errors = append(errors, err.Error())
+		return errors
 	}
-	return tx.Commit().Error
+	err = tx.Commit().Error
+	if err != nil {
+		errors = append(errors, err.Error())
+	}
+	return errors
 }

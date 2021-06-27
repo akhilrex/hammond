@@ -17,9 +17,9 @@ func fuellyImport(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, err)
 		return
 	}
-	err = service.FuellyImport(bytes, c.MustGet("userId").(string))
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": err.Error()})
+	errors := service.FuellyImport(bytes, c.MustGet("userId").(string))
+	if len(errors) > 0 {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errors})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{})

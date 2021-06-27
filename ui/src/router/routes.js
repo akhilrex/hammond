@@ -393,15 +393,31 @@ export default [
     props: (route) => ({ user: store.state.auth.currentUser || {} }),
   },
   {
+    path: '/import',
+    name: 'import',
+    component: () => lazyLoadView(import('@views/import.vue')),
+    meta: {
+      authRequired: true,
+    },
+    props: (route) => ({ user: store.state.auth.currentUser || {} }),
+  },
+  {
+    path: '/import/fuelly',
+    name: 'import-fuelly',
+    component: () => lazyLoadView(import('@views/import-fuelly.vue')),
+    meta: {
+      authRequired: true,
+    },
+    props: (route) => ({ user: store.state.auth.currentUser || {} }),
+  },
+  {
     path: '/logout',
     name: 'logout',
     meta: {
       authRequired: true,
       beforeResolve(routeTo, routeFrom, next) {
         store.dispatch('auth/logOut').then((data) => {
-          const authRequiredOnPreviousRoute = routeFrom.matched.some(
-            (route) => route.meta.authRequired
-          )
+          const authRequiredOnPreviousRoute = routeFrom.matched.some((route) => route.meta.authRequired)
           // Navigate back to previous page, or home as a fallback
           next(authRequiredOnPreviousRoute ? { name: 'login' } : { ...routeFrom })
         })
