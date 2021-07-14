@@ -14,7 +14,7 @@ func UpdateSettings(currency string, distanceUnit db.DistanceUnit) error {
 	setting.DistanceUnit = distanceUnit
 	return db.UpdateSettings(setting)
 }
-func UpdateUserSettings(userId, currency string, distanceUnit db.DistanceUnit) error {
+func UpdateUserSettings(userId, currency string, distanceUnit db.DistanceUnit, dateFormat string) error {
 	user, err := db.GetUserById(userId)
 	if err != nil {
 		return err
@@ -22,6 +22,7 @@ func UpdateUserSettings(userId, currency string, distanceUnit db.DistanceUnit) e
 
 	user.Currency = currency
 	user.DistanceUnit = distanceUnit
+	user.DateFormat = dateFormat
 	return db.UpdateUser(user)
 }
 

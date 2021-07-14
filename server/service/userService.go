@@ -13,6 +13,7 @@ func CreateUser(userModel *models.RegisterRequest, role db.Role) error {
 		Role:         role,
 		Currency:     setting.Currency,
 		DistanceUnit: setting.DistanceUnit,
+		DateFormat:   "MM/dd/yyyy",
 	}
 
 	toCreate.SetPassword(userModel.Password)

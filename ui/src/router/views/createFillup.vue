@@ -6,6 +6,7 @@ import store from '@state/store'
 import { mapState } from 'vuex'
 import axios from 'axios'
 import { round } from 'lodash'
+import { format } from 'date-fns'
 
 export default {
   page: {
@@ -69,6 +70,10 @@ export default {
     }
   },
   methods: {
+    formatDate(date) {
+      const finalFormat = this.me.dateFormat ? this.me.dateFormat : 'MM/dd/yyyy'
+      return format(date, finalFormat)
+    },
     fetchVehicleUsers() {
       store
         .dispatch('vehicles/fetchUsersByVehicleId', { vehicleId: this.selectedVehicle.id })
@@ -186,7 +191,15 @@ export default {
         </b-select>
       </b-field>
       <b-field label="Fillup Date">
-        <b-datepicker v-model="fillupModel.date" placeholder="Click to select..." icon="calendar" trap-focus :max-date="new Date()"> </b-datepicker>
+        <b-datepicker
+          v-model="fillupModel.date"
+          :date-formatter="formatDate"
+          placeholder="Click to select..."
+          icon="calendar"
+          trap-focus
+          :max-date="new Date()"
+        >
+        </b-datepicker>
       </b-field>
       <b-field label="Quantity*" addons>
         <b-input v-model.number="fillupModel.fuelQuantity" type="number" step=".001" min="0" expanded required></b-input>

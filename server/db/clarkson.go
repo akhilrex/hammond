@@ -138,6 +138,7 @@ func MigrateClarkson(connectionString string) (bool, error) {
 			DistanceUnit: distanceUnitMap[v.DistanceUnit],
 			Role:         role,
 			Name:         v.Username,
+			DateFormat:   "MM/dd/yyyy",
 		}
 		user.SetPassword("hammond")
 		err = CreateUser(&user)

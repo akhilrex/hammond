@@ -24,6 +24,7 @@ export default {
       settingsModel: {
         currency: this.me.currency,
         distanceUnit: this.me.distanceUnit,
+        dateFormat: this.me.dateFormat,
       },
       tryingToSave: false,
       changePassModel: {
@@ -31,6 +32,7 @@ export default {
         new: '',
         renew: '',
       },
+      dateFormatMasters: ['dd/MM/yyyy', 'MM/dd/yyyy', 'yyyy/MM/dd'],
     }
   },
   computed: {
@@ -69,9 +71,9 @@ export default {
             .catch((err) => console.log('error:', err))
         })
         .catch((ex) => {
-          let errorMessage= ex.message;
-          if(ex.response && ex.response.data?.errors?.changePassword){
-            errorMessage=ex.response.data?.errors?.changePassword
+          let errorMessage = ex.message
+          if (ex.response && ex.response.data?.errors?.changePassword) {
+            errorMessage = ex.response.data?.errors?.changePassword
           }
           this.$buefy.toast.open({
             duration: 5000,
@@ -134,6 +136,13 @@ export default {
               </option>
             </b-select>
           </b-field>
+          <b-field label="Date Format">
+            <b-select v-model.number="settingsModel.dateFormat" placeholder="Date Format" required expanded>
+              <option v-for="option in dateFormatMasters" :key="option" :value="option">
+                {{ `${option}` }}
+              </option>
+            </b-select>
+          </b-field>
           <br />
           <b-field>
             <b-button tag="input" native-type="submit" :disabled="tryingToSave" type="is-primary" value="Save" expanded> </b-button>
@@ -172,7 +181,7 @@ export default {
         <table class="table is-hoverable">
           <tr>
             <td>Current Version</td>
-            <td>2021.06.27</td>
+            <td>2021.07.14</td>
           </tr>
           <tr>
             <td>Website</td>
@@ -202,7 +211,7 @@ export default {
           </tr>
           <tr>
             <td>Support the developer</td>
-            <td><a href="https://www.buymeacoffee.com/akhilrex" target="_blank" rel="noopener noreferrer">Support here</a></td>
+            <td><a href="https://www.buymeacoffee.com/akhilrex" target="_blank" rel="noopener noreferrer">Buy him a beer!</a></td>
           </tr>
         </table>
       </div>

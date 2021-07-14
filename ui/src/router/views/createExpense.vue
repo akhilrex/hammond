@@ -4,6 +4,7 @@ import QuickEntryDisplay from '@components/quickEntryDisplay.vue'
 import { mapState } from 'vuex'
 import axios from 'axios'
 import store from '@state/store'
+import { format } from 'date-fns'
 
 export default {
   page: {
@@ -61,6 +62,10 @@ export default {
     }
   },
   methods: {
+    formatDate(date) {
+      const finalFormat = this.me.dateFormat ? this.me.dateFormat : 'MM/dd/yyyy'
+      return format(date, finalFormat)
+    },
     getEmptyExpense() {
       return {
         vehicleId: this.selectedVehicle.id,
@@ -172,7 +177,14 @@ export default {
         </b-select>
       </b-field>
       <b-field label="Expense Date">
-        <b-datepicker v-model="expenseModel.date" placeholder="Click to select..." icon="calendar" :max-date="new Date()"> </b-datepicker>
+        <b-datepicker
+          v-model="expenseModel.date"
+          :date-formatter="formatDate"
+          placeholder="Click to select..."
+          icon="calendar"
+          :max-date="new Date()"
+        >
+        </b-datepicker>
       </b-field>
       <b-field label="Expense Type*">
         <b-input v-model="expenseModel.expenseType" expanded required></b-input>

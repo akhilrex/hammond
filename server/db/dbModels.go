@@ -14,6 +14,7 @@ type User struct {
 	Password     string       `json:"-"`
 	Currency     string       `json:"currency"`
 	DistanceUnit DistanceUnit `json:"distanceUnit"`
+	DateFormat   string       `json:"dateFormat"`
 	Role         Role         `json:"role"`
 	Name         string       `json:"name"`
 	Vehicles     []Vehicle    `gorm:"many2many:user_vehicles;" json:"vehicles"`
