@@ -139,6 +139,7 @@ func CreateFillup(model models.CreateFillupRequest) (*db.Fillup, error) {
 		Date:            model.Date,
 		Currency:        user.Currency,
 		DistanceUnit:    user.DistanceUnit,
+		FuelSubType:     model.FuelSubType,
 		Source:          "API",
 	}
 
@@ -196,6 +197,7 @@ func UpdateFillup(fillupId string, model models.UpdateFillupRequest) error {
 		Comments:        model.Comments,
 		FillingStation:  model.FillingStation,
 		UserID:          model.UserID,
+		FuelSubType:     model.FuelSubType,
 		Date:            model.Date,
 	}).Error
 }
@@ -234,6 +236,11 @@ func CreateVehicleAttachment(vehicleId, attachmentId, title string) error {
 func GetVehicleAttachments(vehicleId string) (*[]db.Attachment, error) {
 
 	return db.GetVehicleAttachments(vehicleId)
+}
+func GetDistinctFuelSubtypesForVehicle(vehicleId string) ([]string, error) {
+	var names []string
+	tx := db.DB.Model(&db.Fillup{}).Where("vehicle_id=? and fuel_sub_type is not null", vehicleId).Distinct().Pluck("fuel_sub_type", &names)
+	return names, tx.Error
 }
 
 func GetUserStats(userId string, model models.UserStatsQueryModel) ([]models.VehicleStatsModel, error) {

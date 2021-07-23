@@ -119,6 +119,7 @@ type Fillup struct {
 	Currency        string       `json:"currency"`
 	DistanceUnit    DistanceUnit `json:"distanceUnit"`
 	Source          string       `json:"source"`
+	FuelSubType     string       `json:"fuelSubType"`
 }
 
 func (v *Fillup) FuelUnitDetail() EnumDetail {

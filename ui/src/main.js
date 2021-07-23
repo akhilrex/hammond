@@ -21,6 +21,7 @@ import {
   faTrash,
   faShare,
   faUserFriends,
+  faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -51,6 +52,7 @@ library.add(
   faTrash,
   faShare,
   faUserFriends,
+  faTimesCircle
 )
 Vue.use(Buefy, {
   defaultIconComponent: 'vue-fontawesome',

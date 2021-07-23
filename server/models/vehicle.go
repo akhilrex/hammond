@@ -50,6 +50,7 @@ type CreateFillupRequest struct {
 	FillingStation  string       `form:"fillingStation" json:"fillingStation"`
 	UserID          string       `form:"userId" json:"userId" binding:"required"`
 	Date            time.Time    `form:"date" json:"date" binding:"required" time_format:"2006-01-02"`
+	FuelSubType     string       `form:"fuelSubType" json:"fuelSubType"`
 }
 
 type UpdateFillupRequest struct {

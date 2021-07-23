@@ -140,6 +140,12 @@ export const actions = {
       return data
     })
   },
+  fetchFuelSubtypesByVehicleId({ commit, state, rootState }, { vehicleId, force }) {
+    return axios.get(`/api/vehicles/${vehicleId}/fuelSubTypes`).then((response) => {
+      const data = response.data
+      return data
+    })
+  },
   fetchStatsByVehicleId({ commit, state, rootState }, { vehicleId, force }) {
     if (state.vehicleStats.has(vehicleId) && !force) {
       return Promise.resolve(state.vehicleStats.get(vehicleId))

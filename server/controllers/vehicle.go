@@ -26,6 +26,7 @@ func RegisterVehicleController(router *gin.RouterGroup) {
 	router.GET("/me/stats", getMystats)
 
 	router.GET("/vehicles/:id/fillups", getFillupsByVehicleId)
+	router.GET("/vehicles/:id/fuelSubTypes", getFuelSubTypesByVehicleId)
 	router.POST("/vehicles/:id/fillups", createFillup)
 	router.GET("/vehicles/:id/fillups/:subId", getFillupById)
 	router.PUT("/vehicles/:id/fillups/:subId", updateFillup)
@@ -117,6 +118,22 @@ func getFillupsByVehicleId(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusOK, fillups)
+	} else {
+		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
+	}
+}
+func getFuelSubTypesByVehicleId(c *gin.Context) {
+
+	var searchByIdQuery models.SearchByIdQuery
+
+	if err := c.ShouldBindUri(&searchByIdQuery); err == nil {
+
+		fuelSubtypes, err := service.GetDistinctFuelSubtypesForVehicle(searchByIdQuery.Id)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, common.NewError("getFuelSubTypesByVehicleId", err))
+			return
+		}
+		c.JSON(http.StatusOK, fuelSubtypes)
 	} else {
 		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 	}

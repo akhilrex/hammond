@@ -311,6 +311,9 @@ export default {
         <b-table-column v-slot="props" field="date" label="Date" :td-attrs="columnTdAttrs" sortable date>
           {{ formatDate(props.row.date) }}
         </b-table-column>
+        <b-table-column v-slot="props" field="fuelSubType" label="Fuel Sub Type" :td-attrs="columnTdAttrs">
+          {{ props.row.fuelSubType }}
+        </b-table-column>
         <b-table-column v-slot="props" field="fuelQuantity" label="Qty." :td-attrs="hiddenMobile" numeric>
           {{ `${props.row.fuelQuantity} ${props.row.fuelUnitDetail.short}` }}
         </b-table-column>

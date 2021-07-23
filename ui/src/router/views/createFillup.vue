@@ -34,6 +34,7 @@ export default {
       quickEntry: null,
       myVehicles: [],
       users: [],
+      fuelSubTypes: [],
       selectedVehicle: this.vehicle,
       fillupModel: this.fillup,
       processQuickEntry: false,
@@ -46,6 +47,14 @@ export default {
     },
     ...mapState('users', ['me']),
     ...mapState('vehicles', ['fuelUnitMasters', 'fuelTypeMasters', 'vehicles']),
+    filteredFuelSubtypes() {
+      if (!this.fillupModel.fuelSubType) {
+        return this.fuelSubTypes
+      }
+      return this.fuelSubTypes.filter((option) => {
+        return option.toLowerCase().indexOf(this.fillupModel.fuelSubType.toLowerCase()) >= 0
+      })
+    },
   },
   watch: {
     'fillupModel.fuelQuantity': function(old, newOne) {
@@ -64,6 +73,7 @@ export default {
     this.myVehicles = this.vehicles
     this.selectedVehicle = this.vehicle
     this.fetchVehicleUsers()
+    this.fetchVehicleFuelSubTypes()
     if (!this.fillup.id) {
       this.fillupModel = this.getEmptyFillup()
       this.fillupModel.userId = this.me.id
@@ -82,6 +92,14 @@ export default {
         })
         .catch((err) => console.log(err))
     },
+    fetchVehicleFuelSubTypes() {
+      store
+        .dispatch('vehicles/fetchFuelSubtypesByVehicleId', { vehicleId: this.selectedVehicle.id })
+        .then((data) => {
+          this.fuelSubTypes = data
+        })
+        .catch((err) => console.log(err))
+    },
     getEmptyFillup() {
       return {
         vehicleId: this.selectedVehicle.id,
@@ -96,6 +114,7 @@ export default {
         fillingStation: '',
         comments: '',
         userId: '',
+        fuelSubType: '',
       }
     },
     async createFillup() {
@@ -200,6 +219,17 @@ export default {
           :max-date="new Date()"
         >
         </b-datepicker>
+      </b-field>
+      <b-field label="Fuel Subtype">
+        <b-autocomplete
+          v-model="fillupModel.fuelSubType"
+          :data="filteredFuelSubtypes"
+          placeholder="Octane etc."
+          clearable
+          autofocus
+          @select="(option) => (fillupModel.fuelSubType = option)"
+        >
+        </b-autocomplete>
       </b-field>
       <b-field label="Quantity*" addons>
         <b-input v-model.number="fillupModel.fuelQuantity" type="number" step=".001" min="0" expanded required></b-input>
