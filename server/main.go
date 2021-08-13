@@ -50,6 +50,7 @@ func main() {
 	controllers.RegisterVehicleController(router)
 	controllers.RegisterFilesController(router)
 	controllers.RegisteImportController(router)
+	controllers.RegisterReportsController(router)
 
 	go assetEnv()
 	go intiCron()

@@ -160,6 +160,11 @@ func GetFillupsByVehicleId(id string) (*[]Fillup, error) {
 	result := DB.Preload(clause.Associations).Order("date desc").Find(&obj, &Fillup{VehicleID: id})
 	return &obj, result.Error
 }
+func GetFillupsByVehicleIdSince(id string, since time.Time) (*[]Fillup, error) {
+	var obj []Fillup
+	result := DB.Where("date >= ? AND vehicle_id = ?", since, id).Preload(clause.Associations).Order("date desc").Find(&obj)
+	return &obj, result.Error
+}
 func FindFillups(condition interface{}) (*[]Fillup, error) {
 
 	var model []Fillup
@@ -236,6 +241,10 @@ func GetQuickEntryById(id string) (*QuickEntry, error) {
 	var quickEntry QuickEntry
 	result := DB.Preload(clause.Associations).First(&quickEntry, "id=?", id)
 	return &quickEntry, result.Error
+}
+func DeleteQuickEntryById(id string) error {
+	result := DB.Where("id=?", id).Delete(&QuickEntry{})
+	return result.Error
 }
 func UpdateQuickEntry(entry *QuickEntry) error {
 	return DB.Save(entry).Error

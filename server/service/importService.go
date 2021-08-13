@@ -97,22 +97,23 @@ func FuellyImport(content []byte, userId string) []string {
 			)
 
 			isTankFull := record[6] == "Full"
-
+			fal := false
 			fillups = append(fillups, db.Fillup{
-				VehicleID:      vehicle.ID,
-				FuelUnit:       vehicle.FuelUnit,
-				FuelQuantity:   quantity,
-				PerUnitPrice:   rate,
-				TotalAmount:    totalCost,
-				OdoReading:     odoreading,
-				IsTankFull:     &isTankFull,
-				Comments:       notes,
-				FillingStation: location,
-				UserID:         userId,
-				Date:           date,
-				Currency:       user.Currency,
-				DistanceUnit:   user.DistanceUnit,
-				Source:         "Fuelly",
+				VehicleID:       vehicle.ID,
+				FuelUnit:        vehicle.FuelUnit,
+				FuelQuantity:    quantity,
+				PerUnitPrice:    rate,
+				TotalAmount:     totalCost,
+				OdoReading:      odoreading,
+				IsTankFull:      &isTankFull,
+				Comments:        notes,
+				FillingStation:  location,
+				HasMissedFillup: &fal,
+				UserID:          userId,
+				Date:            date,
+				Currency:        user.Currency,
+				DistanceUnit:    user.DistanceUnit,
+				Source:          "Fuelly",
 			})
 
 		}

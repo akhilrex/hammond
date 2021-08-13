@@ -19,6 +19,8 @@ func RegisterFilesController(router *gin.RouterGroup) {
 	router.GET("/me/quickEntries", getMyQuickEntries)
 	router.GET("/quickEntries/:id", getQuickEntryById)
 	router.POST("/quickEntries/:id/process", setQuickEntryAsProcessed)
+	router.DELETE("/quickEntries/:id", deleteQuickEntryById)
+
 	router.GET("/attachments/:id/file", getAttachmentFile)
 }
 
@@ -72,6 +74,21 @@ func getQuickEntryById(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusOK, quickEntry)
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+	}
+}
+
+func deleteQuickEntryById(c *gin.Context) {
+	var searchByIdQuery models.SearchByIdQuery
+
+	if c.ShouldBindUri(&searchByIdQuery) == nil {
+		err := service.DeleteQuickEntryById(searchByIdQuery.Id)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, common.NewError("deleteQuickEntryById", err))
+			return
+		}
+		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 	}

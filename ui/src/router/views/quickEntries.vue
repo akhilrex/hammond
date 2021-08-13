@@ -40,6 +40,12 @@ export default {
     markProcessed(entry) {
       store.dispatch('vehicles/setQuickEntryAsProcessed', { id: entry.id }).then((data) => {})
     },
+    deleteQuickEntry(entry) {
+      var sure = confirm('This will delete this Quick Entry. This step cannot be reversed. Are you sure?')
+      if (sure) {
+        store.dispatch('vehicles/deleteQuickEntry', { id: entry.id }).then((data) => {})
+      }
+    },
     imageModal(url) {
       const h = this.$createElement
       const vnode = h('p', { class: 'image' }, [h('img', { attrs: { src: url } })])
@@ -86,8 +92,10 @@ export default {
               <router-link v-if="entry.processDate === null && vehicles.length" :to="`/vehicles/${vehicles[0].id}/expense`" class="card-footer-item"
                 >Create Expense</router-link
               >
+
               <a v-if="entry.processDate === null" class="card-footer-item" @click="markProcessed(entry)">Mark Processed</a>
-              <p v-else>Processed on {{ parseAndFormatDateTime(entry.processDate) }}</p>
+              <p v-else class="card-footer-item">Processed on {{ parseAndFormatDateTime(entry.processDate) }}</p>
+              <a class="card-footer-item" type="is-danger" @click="deleteQuickEntry(entry)"> Delete</a>
             </footer>
           </div>
         </div>

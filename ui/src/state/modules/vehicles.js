@@ -165,4 +165,11 @@ export const actions = {
       return data
     })
   },
+  deleteQuickEntry({ commit, state, rootState, dispatch }, { id }) {
+    return axios.delete(`/api/quickEntries/${id}`).then((response) => {
+      const data = response.data
+      dispatch('fetchQuickEntries', { force: true })
+      return data
+    })
+  },
 }

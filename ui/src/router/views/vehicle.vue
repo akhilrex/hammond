@@ -2,10 +2,13 @@
 import Layout from '@layouts/main.vue'
 import { parseAndFormatDate } from '@utils/format-date'
 import { mapState } from 'vuex'
+import { addDays, addMonths } from 'date-fns'
 import axios from 'axios'
 import currencyFormtter from 'currency-formatter'
 import store from '@state/store'
 import ShareVehicle from '@components/shareVehicle.vue'
+import MileageChart from '@components/mileageChart.vue'
+
 export default {
   page() {
     return {
@@ -18,7 +21,7 @@ export default {
       ],
     }
   },
-  components: { Layout },
+  components: { Layout, MileageChart },
   props: {
     vehicle: {
       type: Object,
@@ -36,6 +39,15 @@ export default {
       title: '',
       stats: null,
       users: [],
+      dateRangeOptions: [
+        { label: 'This week', value: 'this_week' },
+        { label: 'This month', value: 'this_month' },
+        { label: 'Past 30 days', value: 'past_30_days' },
+        { label: 'Past 3 months', value: 'past_3_months' },
+        { label: 'This year', value: 'this_year' },
+        { label: 'All Time', value: 'all_time' },
+      ],
+      dateRangeOption: 'past_30_days',
     }
   },
   computed: {
@@ -80,6 +92,7 @@ export default {
       })
     },
   },
+
   mounted() {
     this.fetchFillups()
     this.fetchExpenses()
@@ -105,6 +118,7 @@ export default {
         })
         .catch((err) => console.log(err))
     },
+
     fetchExpenses() {
       axios
         .get(`/api/vehicles/${this.vehicle.id}/expenses`)
@@ -244,6 +258,33 @@ export default {
           this.fetchVehicleUsers()
         },
       })
+    },
+    getStartDate() {
+      const toDate = new Date()
+      switch (this.dateRangeOption) {
+        case 'this_week':
+          var currentDayOfWeek = toDate.getDay()
+          var toSubtract = 0
+          if (currentDayOfWeek === 0) {
+            toSubtract = -6
+          }
+          if (currentDayOfWeek > 1) {
+            toSubtract = -1 * (currentDayOfWeek - 1)
+          }
+          return addDays(toDate, toSubtract)
+        case 'this_month':
+          return new Date(toDate.getFullYear(), toDate.getMonth(), 1)
+        case 'past_30_days':
+          return addDays(toDate, -30)
+        case 'past_3_months':
+          return addMonths(toDate, -3)
+        case 'this_year':
+          return new Date(toDate.getFullYear(), 0, 1)
+        case 'all_time':
+          return new Date(1969, 4, 20)
+        default:
+          return new Date(1969, 4, 20)
+      }
     },
   },
 }
@@ -476,6 +517,19 @@ export default {
         </b-table-column>
         <template v-slot:empty> No Attachments so far</template>
       </b-table>
+    </div>
+    <div class="box">
+      <div class="columns">
+        <div class="column" :class="isMobile ? 'has-text-centered' : ''"> <h1 class="title">Stats</h1></div>
+        <div class="column">
+          <b-select v-model="dateRangeOption" class="is-pulled-right is-medium">
+            <option v-for="option in dateRangeOptions" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </b-select></div
+        >
+      </div>
+      <MileageChart :vehicle="vehicle" :since="getStartDate()" :user="me" :height="300" />
     </div>
   </Layout>
 </template>

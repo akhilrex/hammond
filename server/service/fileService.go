@@ -58,6 +58,9 @@ func GetQuickEntriesForUser(userId, sorting string) (*[]db.QuickEntry, error) {
 func GetQuickEntryById(id string) (*db.QuickEntry, error) {
 	return db.GetQuickEntryById(id)
 }
+func DeleteQuickEntryById(id string) error {
+	return db.DeleteQuickEntryById(id)
+}
 func SetQuickEntryAsProcessed(id string) error {
 	return db.SetQuickEntryAsProcessed(id, time.Now())
 
