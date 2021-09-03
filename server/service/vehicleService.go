@@ -5,6 +5,7 @@ import (
 
 	"github.com/akhilrex/hammond/db"
 	"github.com/akhilrex/hammond/models"
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
@@ -241,6 +242,24 @@ func GetDistinctFuelSubtypesForVehicle(vehicleId string) ([]string, error) {
 	var names []string
 	tx := db.DB.Model(&db.Fillup{}).Where("vehicle_id=? and fuel_sub_type is not null", vehicleId).Distinct().Pluck("fuel_sub_type", &names)
 	return names, tx.Error
+}
+
+func GetLatestOdoReadingForVehicle(vehicleId string) (int, error) {
+	odoReading := 0
+	latestFillup, err := db.GetLatestExpenseByVehicleId(vehicleId)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return 0, err
+	}
+	odoReading = latestFillup.OdoReading
+
+	latestExpense, err := db.GetLatestExpenseByVehicleId(vehicleId)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return 0, err
+	}
+	if latestExpense.OdoReading > odoReading {
+		odoReading = latestExpense.OdoReading
+	}
+	return odoReading, nil
 }
 
 func GetUserStats(userId string, model models.UserStatsQueryModel) ([]models.VehicleStatsModel, error) {

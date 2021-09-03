@@ -160,6 +160,11 @@ func GetFillupsByVehicleId(id string) (*[]Fillup, error) {
 	result := DB.Preload(clause.Associations).Order("date desc").Find(&obj, &Fillup{VehicleID: id})
 	return &obj, result.Error
 }
+func GetLatestFillupsByVehicleId(id string) (*Fillup, error) {
+	var obj Fillup
+	result := DB.Preload(clause.Associations).Order("date desc").First(&obj, &Fillup{VehicleID: id})
+	return &obj, result.Error
+}
 func GetFillupsByVehicleIdSince(id string, since time.Time) (*[]Fillup, error) {
 	var obj []Fillup
 	result := DB.Where("date >= ? AND vehicle_id = ?", since, id).Preload(clause.Associations).Order("date desc").Find(&obj)
@@ -188,6 +193,11 @@ func FindExpensesForDateRange(vehicleIds []string, start, end time.Time) (*[]Exp
 func GetExpensesByVehicleId(id string) (*[]Expense, error) {
 	var obj []Expense
 	result := DB.Preload(clause.Associations).Order("date desc").Find(&obj, &Expense{VehicleID: id})
+	return &obj, result.Error
+}
+func GetLatestExpenseByVehicleId(id string) (*Expense, error) {
+	var obj Expense
+	result := DB.Preload(clause.Associations).Order("date desc").First(&obj, &Expense{VehicleID: id})
 	return &obj, result.Error
 }
 func GetExpenseById(id string) (*Expense, error) {
@@ -270,6 +280,29 @@ func GetVehicleAttachments(vehicleId string) (*[]Attachment, error) {
 		return nil, err
 	}
 	return &attachments, nil
+}
+func GeAlertById(id string) (*VehicleAlert, error) {
+	var alert VehicleAlert
+	result := DB.Preload(clause.Associations).First(&alert, "id=?", id)
+	return &alert, result.Error
+}
+func GetAlertOccurenceByAlertId(id string) (*[]AlertOccurance, error) {
+	var alertOccurance []AlertOccurance
+	result := DB.Preload(clause.Associations).Order("created_at desc").Find(&alertOccurance, "vehicle_alert_id=?", id)
+	return &alertOccurance, result.Error
+}
+
+func GetUnprocessedAlertOccurances() (*[]AlertOccurance, error) {
+	var alertOccurance []AlertOccurance
+	result := DB.Preload(clause.Associations).Order("created_at desc").Find(&alertOccurance, "process_date is NULL")
+	return &alertOccurance, result.Error
+}
+func MarkAlertOccuranceAsProcessed(id string, alertProcessType AlertType, date time.Time) error {
+	tx := DB.Debug().Model(&AlertOccurance{}).Where("id= ?", id).
+		Update("alert_process_type", alertProcessType).
+		Update("process_date", date)
+	return tx.Error
+
 }
 
 func UpdateSettings(setting *Setting) error {
