@@ -64,7 +64,7 @@ type UpdateExpenseRequest struct {
 type CreateExpenseRequest struct {
 	VehicleID string `form:"vehicleId" json:"vehicleId" binding:"required"`
 
-	Amount     float32 `form:"amount" json:"amount" binding:"required"`
+	Amount     float32 `form:"amount" json:"amount"`
 	OdoReading int     `form:"odoReading" json:"odoReading"`
 
 	Comments    string    `form:"comments" json:"comments" `
