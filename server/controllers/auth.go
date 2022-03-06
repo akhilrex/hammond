@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/akhilrex/hammond/common"
 	"github.com/akhilrex/hammond/db"
@@ -91,7 +92,7 @@ func userLogin(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 		return
 	}
-	user, err := db.FindOneUser(&db.User{Email: loginRequest.Email})
+	user, err := db.FindOneUser(&db.User{Email: strings.ToLower(loginRequest.Email)})
 
 	if err != nil {
 		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("Not Registered email or invalid password")))

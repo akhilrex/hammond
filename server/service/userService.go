@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strings"
+
 	"github.com/akhilrex/hammond/db"
 	"github.com/akhilrex/hammond/models"
 )
@@ -8,7 +10,7 @@ import (
 func CreateUser(userModel *models.RegisterRequest, role db.Role) error {
 	setting := db.GetOrCreateSetting()
 	toCreate := db.User{
-		Email:        userModel.Email,
+		Email:        strings.ToLower(userModel.Email),
 		Name:         userModel.Name,
 		Role:         role,
 		Currency:     setting.Currency,

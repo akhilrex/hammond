@@ -18,6 +18,10 @@ var migrations = []localMigration{
 		Name:  "2021_06_24_04_42_SetUserDisabledFalse",
 		Query: "update users set is_disabled=0",
 	},
+	{
+		Name:  "2021_02_07_00_09_LowerCaseEmails",
+		Query: "update users set email=lower(email)",
+	},
 }
 
 func RunMigrations() {
