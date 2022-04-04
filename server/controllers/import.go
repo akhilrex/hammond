@@ -32,7 +32,12 @@ func drivvoImport(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, err)
 		return
 	}
-	errors := service.DrivvoImport(bytes, c.MustGet("userId").(string))
+	vehicleId := c.PostForm("vehicleID")
+	if vehicleId == "" {
+		c.JSON(http.StatusUnprocessableEntity, "Missing Vehicle ID")
+		return
+	}
+	errors := service.DrivvoImport(bytes, c.MustGet("userId").(string), vehicleId)
 	if len(errors) > 0 {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errors})
 		return

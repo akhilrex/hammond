@@ -13,7 +13,7 @@ import (
 
 // TODO: Move drivvo stuff to separate file
 
-func DrivvoParseExpenses(content []byte, user *db.User) ([]db.Expense, []string) {
+func DrivvoParseExpenses(content []byte, user *db.User, vehicle *db.Vehicle) ([]db.Expense, []string) {
 	expenseReader := csv.NewReader(bytes.NewReader(content))
 	expenseReader.Comment = '#'
 	// Read headers (there is a trailing comma at the end, that's why we have to read the first line)
@@ -53,6 +53,7 @@ func DrivvoParseExpenses(content []byte, user *db.User) ([]db.Expense, []string)
 		notes := fmt.Sprintf("Location: %s\nNotes: %s\n", record[4], record[5])
 		expense.Comments = notes
 
+		expense.VehicleID = vehicle.ID
 		expense.ExpenseType = record[3]
 		expense.UserID = user.ID
 		expense.Currency = user.Currency
@@ -65,7 +66,7 @@ func DrivvoParseExpenses(content []byte, user *db.User) ([]db.Expense, []string)
 	return expenses, errors
 }
 
-func DrivvoParseRefuelings(content []byte, user *db.User) ([]db.Fillup, []string) {
+func DrivvoParseRefuelings(content []byte, user *db.User, vehicle *db.Vehicle) ([]db.Fillup, []string) {
 	refuelingReader := csv.NewReader(bytes.NewReader(content))
 	refuelingReader.Comment = '#'
 	refuelingRecords, err := refuelingReader.ReadAll()
@@ -131,6 +132,8 @@ func DrivvoParseRefuelings(content []byte, user *db.User) ([]db.Fillup, []string
 		notes := fmt.Sprintf("Reason: %s\nNotes: %s\nFuel: %s\n", record[18], record[19], record[2])
 		fillup.Comments = notes
 
+		fillup.VehicleID = vehicle.ID
+		fillup.FuelUnit = vehicle.FuelUnit
 		fillup.UserID = user.ID
 		fillup.Currency = user.Currency
 		fillup.DistanceUnit = user.DistanceUnit
@@ -141,9 +144,15 @@ func DrivvoParseRefuelings(content []byte, user *db.User) ([]db.Fillup, []string
 	return fillups, errors
 }
 
-func DrivvoImport(content []byte, userId string) []string {
+func DrivvoImport(content []byte, userId string, vehicleId string) []string {
 	var errors []string
 	user, err := GetUserById(userId)
+	if err != nil {
+		errors = append(errors, err.Error())
+		return errors
+	}
+
+	vehicle, err := GetVehicleById(vehicleId)
 	if err != nil {
 		errors = append(errors, err.Error())
 		return errors
@@ -165,12 +174,12 @@ func DrivvoImport(content []byte, userId string) []string {
 		expenseSectionIndex = endParseIndex
 	}
 
-	fillups, errors := DrivvoParseRefuelings(content[:serviceSectionIndex], user)
+	fillups, errors := DrivvoParseRefuelings(content[:serviceSectionIndex], user, vehicle)
 	_ = fillups
 
 	var allExpenses []db.Expense
 	if serviceSectionIndex != -1 {
-		services, parseErrors := DrivvoParseExpenses(content[serviceSectionIndex:expenseSectionIndex], user)
+		services, parseErrors := DrivvoParseExpenses(content[serviceSectionIndex:expenseSectionIndex], user, vehicle)
 		if parseErrors != nil {
 			errors = append(errors, parseErrors...)
 		}
@@ -178,7 +187,7 @@ func DrivvoImport(content []byte, userId string) []string {
 	}
 
 	if expenseSectionIndex != endParseIndex {
-		expenses, parseErrors := DrivvoParseExpenses(content[expenseSectionIndex:endParseIndex], user)
+		expenses, parseErrors := DrivvoParseExpenses(content[expenseSectionIndex:endParseIndex], user, vehicle)
 		if parseErrors != nil {
 			errors = append(errors, parseErrors...)
 		}
@@ -189,7 +198,29 @@ func DrivvoImport(content []byte, userId string) []string {
 		return errors
 	}
 
-	errors = append(errors, "Not implemented")
+	tx := db.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		errors = append(errors, err.Error())
+		return errors
+	}
+	if err := tx.Create(&fillups).Error; err != nil {
+		tx.Rollback()
+		errors = append(errors, err.Error())
+		return errors
+	}
+	if err := tx.Create(&allExpenses).Error; err != nil {
+		tx.Rollback()
+		errors = append(errors, err.Error())
+		return errors
+	}
+	if err := tx.Commit().Error; err != nil {
+		errors = append(errors, err.Error())
+	}
 	return errors
 }
 
