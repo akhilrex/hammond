@@ -9,6 +9,7 @@ import (
 
 func RegisteImportController(router *gin.RouterGroup) {
 	router.POST("/import/fuelly", fuellyImport)
+	router.POST("/import/drivvo", drivvoImport)
 }
 
 func fuellyImport(c *gin.Context) {
@@ -18,6 +19,20 @@ func fuellyImport(c *gin.Context) {
 		return
 	}
 	errors := service.FuellyImport(bytes, c.MustGet("userId").(string))
+	if len(errors) > 0 {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errors})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{})
+}
+
+func drivvoImport(c *gin.Context) {
+	bytes, err := getFileBytes(c, "file")
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err)
+		return
+	}
+	errors := service.DrivvoImport(bytes, c.MustGet("userId").(string))
 	if len(errors) > 0 {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errors})
 		return

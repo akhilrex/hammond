@@ -411,6 +411,15 @@ export default [
     props: (route) => ({ user: store.state.auth.currentUser || {} }),
   },
   {
+    path: '/import/drivvo',
+    name: 'import-drivvo',
+    component: () => lazyLoadView(import('@views/import-drivvo.vue')),
+    meta: {
+      authRequired: true,
+    },
+    props: (route) => ({ user: store.state.auth.currentUser || {} }),
+  },
+  {
     path: '/logout',
     name: 'logout',
     meta: {
