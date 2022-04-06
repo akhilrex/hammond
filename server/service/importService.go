@@ -54,8 +54,6 @@ func DrivvoImport(content []byte, userId string, vehicleId string, importLocatio
 		return errors
 	}
 
-	serviceSectionIndex := bytes.Index(content, []byte("#Service"))
-
 	endParseIndex := bytes.Index(content, []byte("#Income"))
 	if endParseIndex == -1 {
 		endParseIndex = bytes.Index(content, []byte("#Route"))
@@ -65,29 +63,32 @@ func DrivvoImport(content []byte, userId string, vehicleId string, importLocatio
 
 	}
 
-	expenseSectionIndex := bytes.Index(content, []byte("#Expense"))
-	if expenseSectionIndex == -1 {
-		expenseSectionIndex = endParseIndex
+	serviceEndIndex := bytes.Index(content, []byte("#Expense"))
+	if serviceEndIndex == -1 {
+		serviceEndIndex = endParseIndex
 	}
 
-	fillups, errors := DrivvoParseRefuelings(content[:serviceSectionIndex], user, vehicle, importLocation)
+	refuelEndIndex := bytes.Index(content, []byte("#Service"))
+	if refuelEndIndex == -1 {
+		refuelEndIndex = serviceEndIndex
+	}
+
+	var fillups []db.Fillup
+	fillups, errors = DrivvoParseRefuelings(content[:refuelEndIndex], user, vehicle, importLocation)
 
 	var allExpenses []db.Expense
-	if serviceSectionIndex != -1 {
-		services, parseErrors := DrivvoParseExpenses(content[serviceSectionIndex:expenseSectionIndex], user, vehicle)
-		if parseErrors != nil {
-			errors = append(errors, parseErrors...)
-		}
-		allExpenses = append(allExpenses, services...)
+	services, parseErrors := DrivvoParseExpenses(content[refuelEndIndex:serviceEndIndex], user, vehicle)
+	if parseErrors != nil {
+		errors = append(errors, parseErrors...)
+	}
+	allExpenses = append(allExpenses, services...)
+
+	expenses, parseErrors := DrivvoParseExpenses(content[serviceEndIndex:endParseIndex], user, vehicle)
+	if parseErrors != nil {
+		errors = append(errors, parseErrors...)
 	}
 
-	if expenseSectionIndex != endParseIndex {
-		expenses, parseErrors := DrivvoParseExpenses(content[expenseSectionIndex:endParseIndex], user, vehicle)
-		if parseErrors != nil {
-			errors = append(errors, parseErrors...)
-		}
-		allExpenses = append(allExpenses, expenses...)
-	}
+	allExpenses = append(allExpenses, expenses...)
 
 	if len(errors) != 0 {
 		return errors
