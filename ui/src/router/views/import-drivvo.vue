@@ -82,6 +82,7 @@ export default {
         })
         .finally(() => {
           this.tryingToCreate = false
+          setTimeout(() => this.$router.push({ name: 'home' }), 1000)
         })
     },
   },
