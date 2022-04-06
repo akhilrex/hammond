@@ -96,7 +96,6 @@ export default {
     <br />
     <div class="columns">
       <div class="column">
-        <!-- TODO: Write about that income and trips are not imported. Also Second and Third fuel are ignored -->
         <p class="subtitle"> Steps to import data from Drivvo</p>
         <ol>
           <li>Export your data from Drivvo in the CSV format.</li>
@@ -111,6 +110,12 @@ export default {
         </ol>
       </div>
     </div>
+    <p
+      ><b>PS:</b> If you have <em>'income'</em> and <em>'trips'</em> in your export, they will not be imported to Hammond. The fields
+      <em>'Second fuel'</em> and <em>'Third fuel'</em> are are are also ignored as the use case for these is not understood by us. If you have a use
+      case for this, please open a issue on
+      <a href="https://github.com/akhilrex/hammond/issues">issue tracker</a>
+    </p>
     <div class="section box">
       <div class="columns is-multiline">
         <div class="column is-full"> <p class="subtitle">Choose the vehicle, then select the Drivvo CSV and press the import button.</p></div>
