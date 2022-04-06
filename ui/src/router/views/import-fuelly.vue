@@ -58,6 +58,7 @@ export default {
             duration: 3000,
           })
           this.file = null
+          setTimeout(() => this.$router.push({ name: 'home' }), 1000)
         })
         .catch((ex) => {
           this.$buefy.toast.open({
@@ -72,7 +73,6 @@ export default {
         })
         .finally(() => {
           this.tryingToCreate = false
-          setTimeout(() => this.$router.push({ name: 'home' }), 1000)
         })
     },
   },
