@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/akhilrex/hammond/service"
 	"github.com/gin-gonic/gin"
@@ -37,7 +38,13 @@ func drivvoImport(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, "Missing Vehicle ID")
 		return
 	}
-	errors := service.DrivvoImport(bytes, c.MustGet("userId").(string), vehicleId)
+	importLocation, err := strconv.ParseBool(c.PostForm("importLocation"))
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, "Please include importLocation option.")
+		return
+	}
+
+	errors := service.DrivvoImport(bytes, c.MustGet("userId").(string), vehicleId, importLocation)
 	if len(errors) > 0 {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errors})
 		return

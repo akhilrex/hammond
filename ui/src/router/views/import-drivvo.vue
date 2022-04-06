@@ -22,6 +22,7 @@ export default {
       selectedVehicle: null,
       tryingToCreate: false,
       errors: [],
+      importLocation: true,
     }
   },
   computed: {
@@ -56,6 +57,7 @@ export default {
       this.errorMessage = ''
       const formData = new FormData()
       formData.append('vehicleID', this.selectedVehicle)
+      formData.append('importLocation', this.importLocation)
       formData.append('file', this.file, this.file.name)
       axios
         .post(`/api/import/drivvo`, formData)
@@ -127,6 +129,13 @@ export default {
                   <b-select v-model="selectedVehicle" placeholder="Select Vehicle" required>
                     <option v-for="vehicle in myVehicles" :key="vehicle.id" :value="vehicle.id">{{ vehicle.nickname }}</option>
                   </b-select>
+                </b-field>
+              </div>
+              <div class="column">
+                <b-field>
+                  <b-tooltip label="Whether to import the location for fillups and services or not." multilined>
+                    <b-checkbox v-model="importLocation">Import Location?</b-checkbox>
+                  </b-tooltip>
                 </b-field>
               </div>
 

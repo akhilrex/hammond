@@ -65,7 +65,7 @@ func DrivvoParseExpenses(content []byte, user *db.User, vehicle *db.Vehicle) ([]
 	return expenses, errors
 }
 
-func DrivvoParseRefuelings(content []byte, user *db.User, vehicle *db.Vehicle) ([]db.Fillup, []string) {
+func DrivvoParseRefuelings(content []byte, user *db.User, vehicle *db.Vehicle, importLocation bool) ([]db.Fillup, []string) {
 	refuelingReader := csv.NewReader(bytes.NewReader(content))
 	refuelingReader.Comment = '#'
 	refuelingRecords, err := refuelingReader.ReadAll()
@@ -99,8 +99,10 @@ func DrivvoParseRefuelings(content []byte, user *db.User, vehicle *db.Vehicle) (
 			errors = append(errors, "Found an invalid odometer reading at refuel row "+strconv.Itoa(index+1))
 		}
 
-		// TODO: Make optional
-		location := record[17]
+		location := ""
+		if importLocation {
+			location = record[17]
+		}
 
 		pricePerUnit, err := strconv.ParseFloat(record[3], 32)
 		if err != nil {
@@ -142,7 +144,7 @@ func DrivvoParseRefuelings(content []byte, user *db.User, vehicle *db.Vehicle) (
 	return fillups, errors
 }
 
-func DrivvoImport(content []byte, userId string, vehicleId string) []string {
+func DrivvoImport(content []byte, userId string, vehicleId string, importLocation bool) []string {
 	var errors []string
 	user, err := GetUserById(userId)
 	if err != nil {
@@ -172,7 +174,7 @@ func DrivvoImport(content []byte, userId string, vehicleId string) []string {
 		expenseSectionIndex = endParseIndex
 	}
 
-	fillups, errors := DrivvoParseRefuelings(content[:serviceSectionIndex], user, vehicle)
+	fillups, errors := DrivvoParseRefuelings(content[:serviceSectionIndex], user, vehicle, importLocation)
 	_ = fillups
 
 	var allExpenses []db.Expense
