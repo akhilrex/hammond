@@ -16,7 +16,7 @@ export default {
       password: '',
       authError: null,
       tryingToLogIn: false,
-      errorMessage:''
+      errorMessage: '',
     }
   },
   computed: {
@@ -38,7 +38,7 @@ export default {
     // and password they provided.
     tryToLogIn() {
       this.tryingToLogIn = true
-      this.errorMessage='';
+      this.errorMessage = ''
       // Reset the authError if it existed.
       this.authError = null
       return this.logIn({
@@ -53,9 +53,9 @@ export default {
           // Redirect to the originally requested page, or to the home page
         })
         .catch((error) => {
-         if(error.response.data?.errors?.login){
-           this.errorMessage=error.response.data.errors.login
-         }
+          if (error.response.data?.errors?.login) {
+            this.errorMessage = error.response.data.errors.login
+          }
           this.tryingToLogIn = false
           this.authError = error
         })
@@ -67,21 +67,9 @@ export default {
 <template>
   <Layout>
     <form @submit.prevent="tryToLogIn">
-      <b-field label="Email">
-        <b-input
-          v-model="username"
-          tag="b-input"
-          name="username"
-          :placeholder="placeholders.username"
-      /></b-field>
+      <b-field label="Email"> <b-input v-model="username" tag="b-input" name="username" type="email" :placeholder="placeholders.username"/></b-field>
       <b-field label="Password">
-        <b-input
-          v-model="password"
-          tag="b-input"
-          name="password"
-          type="password"
-          :placeholder="placeholders.password"
-        />
+        <b-input v-model="password" tag="b-input" name="password" type="password" :placeholder="placeholders.password" />
       </b-field>
       <b-button tag="input" native-type="submit" :disabled="tryingToLogIn" type="is-primary">
         <BaseIcon v-if="tryingToLogIn" name="sync" spin />
@@ -89,9 +77,7 @@ export default {
           Log in
         </span>
       </b-button>
-      <p v-if="authError">
-        There was an error logging in to your account. {{errorMessage}}
-      </p>
+      <p v-if="authError"> There was an error logging in to your account. {{ errorMessage }} </p>
     </form>
   </Layout>
 </template>
