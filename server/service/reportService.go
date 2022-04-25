@@ -1,6 +1,7 @@
 package service
 
 import (
+	"sort"
 	"time"
 
 	"github.com/akhilrex/hammond/db"
@@ -15,6 +16,9 @@ func GetMileageByVehicleId(vehicleId string, since time.Time) (mileage []models.
 
 	fillups := make([]db.Fillup, len(*data))
 	copy(fillups, *data)
+	sort.Slice(fillups, func(i, j int) bool {
+		return fillups[i].OdoReading > fillups[j].OdoReading
+	})
 
 	var mileages []models.MileageModel
 
