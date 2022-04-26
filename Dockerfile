@@ -9,7 +9,7 @@ RUN go mod download
 COPY ./server .
 RUN go build -o ./app ./main.go
 
-FROM node:latest as build-stage
+FROM node:14 as build-stage
 WORKDIR /app
 COPY ./ui/package*.json ./
 RUN npm install
