@@ -38,11 +38,15 @@ func CreateAlertInstance(alertId string) error {
 		return err
 	}
 	existingOccurence, err := db.GetAlertOccurenceByAlertId(alertId)
+	if err != nil {
+		return err
+	}
 	var lastOccurance db.AlertOccurance
+	useOccurance := false
 
 	if len(*existingOccurence) > 0 {
 		lastOccurance = (*existingOccurence)[0]
-
+		useOccurance = true
 		if alert.AlertFrequency == db.ONETIME {
 			return errors.New("Only single occurance is possible for this kind of alert")
 		}
@@ -68,13 +72,13 @@ func CreateAlertInstance(alertId string) error {
 
 		if alert.AlertType == db.DISTANCE || alert.AlertType == db.BOTH {
 			model.OdoReading = alert.StartOdoReading + alert.OdoFrequency
-			if &lastOccurance != nil {
+			if useOccurance {
 				model.OdoReading = lastOccurance.OdoReading + alert.OdoFrequency
 			}
 		}
 		if alert.AlertType == db.TIME || alert.AlertType == db.BOTH {
 			date := alert.StartDate.Add(time.Duration(alert.DayFrequency) * 24 * time.Hour)
-			if &lastOccurance != nil {
+			if useOccurance {
 				date = lastOccurance.Date.Add(time.Duration(alert.DayFrequency) * 24 * time.Hour)
 			}
 			model.Date = &date
@@ -161,4 +165,8 @@ func FindAlertOccurancesToProcess(today time.Time) ([]db.AlertOccurance, error) 
 
 	}
 	return toReturn, nil
+}
+
+func MarkAlertOccuranceAsCompleted() {
+
 }
