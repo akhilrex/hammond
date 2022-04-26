@@ -16,7 +16,7 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
       - name: Available platforms
-        run: echo ${{ steps.qemu.outputs.platforms }
+        run: echo ${{ steps.qemu.outputs.platforms }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Set up build cache
