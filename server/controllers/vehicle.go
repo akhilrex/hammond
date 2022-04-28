@@ -397,7 +397,7 @@ func deleteVehicle(c *gin.Context) {
 			return
 		}
 		if !canDelete {
-			c.JSON(http.StatusUnprocessableEntity, common.NewError("shareVehicle", errors.New("You are not allowed to delete this vehicle.")))
+			c.JSON(http.StatusUnprocessableEntity, common.NewError("shareVehicle", errors.New("you are not allowed to delete this vehicle")))
 			return
 		}
 		err = service.DeleteVehicle(searchByIdQuery.Id)
