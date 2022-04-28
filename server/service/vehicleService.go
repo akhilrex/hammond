@@ -13,6 +13,7 @@ func CreateVehicle(model models.CreateVehicleRequest, userId string) (*db.Vehicl
 		Nickname:          model.Nickname,
 		Registration:      model.Registration,
 		Model:             model.Model,
+		VIN:               model.VIN,
 		Make:              model.Make,
 		YearOfManufacture: model.YearOfManufacture,
 		EngineSize:        model.EngineSize,
