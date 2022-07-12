@@ -18,6 +18,10 @@ var migrations = []localMigration{
 		Name:  "2021_06_24_04_42_SetUserDisabledFalse",
 		Query: "update users set is_disabled=0",
 	},
+	{
+		Name:  "2022_03_08_13_16_AddVIN",
+		Query: "ALTER TABLE vehicles ADD COLUMN vin text",
+	},
 }
 
 func RunMigrations() {

@@ -60,6 +60,7 @@ type Vehicle struct {
 	Base
 	Nickname          string       `json:"nickname"`
 	Registration      string       `json:"registration"`
+	VIN               string       `json:"vin"`
 	Make              string       `json:"make"`
 	Model             string       `json:"model"`
 	YearOfManufacture int          `json:"yearOfManufacture"`

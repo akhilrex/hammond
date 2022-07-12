@@ -14,6 +14,7 @@ func CreateVehicle(model models.CreateVehicleRequest, userId string) (*db.Vehicl
 		Nickname:          model.Nickname,
 		Registration:      model.Registration,
 		Model:             model.Model,
+		VIN:               model.VIN,
 		Make:              model.Make,
 		YearOfManufacture: model.YearOfManufacture,
 		EngineSize:        model.EngineSize,
@@ -100,6 +101,7 @@ func UpdateVehicle(vehicleID string, model models.UpdateVehicleRequest) error {
 	//return db.DB.Model(&toUpdate).Updates(db.Vehicle{
 	toUpdate.Nickname = model.Nickname
 	toUpdate.Registration = model.Registration
+	toUpdate.VIN = model.VIN
 	toUpdate.Model = model.Model
 	toUpdate.Make = model.Make
 	toUpdate.YearOfManufacture = model.YearOfManufacture

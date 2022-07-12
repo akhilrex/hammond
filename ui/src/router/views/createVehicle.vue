@@ -47,6 +47,7 @@ export default {
           fuelUnit: null,
           fuelType: null,
           registration: '',
+          vin: '',
           nickname: '',
           engineSize: null,
           make: '',
@@ -58,6 +59,7 @@ export default {
           fuelUnit: veh.fuelUnit,
           fuelType: veh.fuelType,
           registration: veh.registration,
+          vin: veh.vin,
           nickname: veh.nickname,
           engineSize: veh.engineSize,
           make: veh.make,
@@ -137,6 +139,9 @@ export default {
       </b-field>
       <b-field label="Registration*">
         <b-input v-model="vehicleModel.registration" type="text" expanded required></b-input>
+      </b-field>
+      <b-field label="VIN">
+        <b-input v-model="vehicleModel.vin" type="text" expanded></b-input>
       </b-field>
       <b-field label="Fuel Type*">
         <b-select v-model.number="vehicleModel.fuelType" placeholder="Fuel Type" required expanded>

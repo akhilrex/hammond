@@ -17,6 +17,7 @@ type SubItemQuery struct {
 type CreateVehicleRequest struct {
 	Nickname          string       `form:"nickname" json:"nickname" binding:"required"`
 	Registration      string       `form:"registration" json:"registration" binding:"required"`
+	VIN               string       `form:"vin" json:"vin"`
 	Make              string       `form:"make" json:"make" binding:"required"`
 	Model             string       `form:"model" json:"model" binding:"required"`
 	YearOfManufacture int          `form:"yearOfManufacture" json:"yearOfManufacture"`
