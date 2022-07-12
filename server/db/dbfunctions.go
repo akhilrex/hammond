@@ -117,7 +117,7 @@ func UnshareVehicle(vehicleId, userId string) error {
 		return nil
 	}
 	if mapping.IsOwner {
-		return fmt.Errorf("Cannot unshare owner")
+		return fmt.Errorf("cannot unshare owner")
 	}
 	result := DB.Where("id=?", mapping.ID).Delete(&UserVehicle{})
 	return result.Error
@@ -365,8 +365,7 @@ func UnlockMissedJobs() {
 		if (job.Date == time.Time{}) {
 			continue
 		}
-		var duration time.Duration
-		duration = time.Duration(job.Duration)
+		var duration = time.Duration(job.Duration)
 		d := job.Date.Add(time.Minute * duration)
 		if d.Before(time.Now()) {
 			fmt.Println(job.Name + " is unlocked")

@@ -51,7 +51,7 @@ func migrate(c *gin.Context) {
 		canMigrate, _, _ := db.CanMigrate(request.Url)
 
 		if !canMigrate {
-			c.JSON(http.StatusBadRequest, fmt.Errorf("cannot migrate database. please check connection string."))
+			c.JSON(http.StatusBadRequest, fmt.Errorf("cannot migrate database. please check connection string"))
 			return
 		}
 
