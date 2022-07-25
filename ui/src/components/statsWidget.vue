@@ -106,6 +106,7 @@ export default {
           if (currentDayOfWeek > 1) {
             toSubtract = -1 * (currentDayOfWeek - 1)
           }
+          toDate.setHours(0, 0, 0, 0)
           return addDays(toDate, toSubtract)
         case 'this_month':
           return new Date(toDate.getFullYear(), toDate.getMonth(), 1)
@@ -114,7 +115,7 @@ export default {
         case 'past_3_months':
           return addMonths(toDate, -3)
         case 'this_year':
-          return new Date(toDate.getFullYear(), 1, 1)
+          return new Date(toDate.getFullYear(), 0, 1)
         case 'all_time':
           return new Date(1969, 4, 20)
         default:
