@@ -5,12 +5,29 @@ import axios from 'axios'
 
 export default {
   page: {
-    title: 'Import Fuelly',
-    meta: [{ name: 'description', content: 'The Import Fuelly page.' }],
+    title: 'Import Drivvo',
+    meta: [{ name: 'description', content: 'The Import Drivvo page.' }],
   },
   components: { Layout },
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
+  data: function() {
+    return {
+      myVehicles: [],
+      file: null,
+      selectedVehicle: null,
+      tryingToCreate: false,
+      errors: [],
+      importLocation: true,
+    }
+  },
   computed: {
     ...mapState('utils', ['isMobile']),
+    ...mapState('vehicles', ['vehicles']),
     uploadButtonLabel() {
       if (this.isMobile) {
         if (this.file == null) {
@@ -27,30 +44,23 @@ export default {
       }
     },
   },
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
-  data: function() {
-    return {
-      file: null,
-      tryingToCreate: false,
-      errors: [],
-    }
+  mounted() {
+    this.myVehicles = this.vehicles
   },
   methods: {
-    importFuelly() {
+    importDrivvo() {
+      console.log('Import from drivvo')
       if (this.file == null) {
         return
       }
       this.tryingToCreate = true
       this.errorMessage = ''
       const formData = new FormData()
+      formData.append('vehicleID', this.selectedVehicle)
+      formData.append('importLocation', this.importLocation)
       formData.append('file', this.file, this.file.name)
       axios
-        .post(`/api/import/fuelly`, formData)
+        .post(`/api/import/drivvo`, formData)
         .then((data) => {
           this.$buefy.toast.open({
             message: 'Data Imported Successfully',
@@ -83,37 +93,54 @@ export default {
   <Layout>
     <div class="columns box">
       <div class="column">
-        <h1 class="title">Import from Fuelly</h1>
+        <h1 class="title">Import from Drivvo</h1>
       </div>
     </div>
     <br />
     <div class="columns">
       <div class="column">
-        <p class="subtitle"> Steps to import data from Fuelly</p>
+        <p class="subtitle"> Steps to import data from Drivvo</p>
         <ol>
+          <li>Export your data from Drivvo in the CSV format.</li>
+          <li>Select the vehicle the exported data is for. You may need to create the vehicle in Hammond first if you haven't already done so</li>
           <li
-            >Export your data from Fuelly in the CSV format. Steps to do that can be found
-            <a href="http://docs.fuelly.com/acar-import-export-center" target="_nofollow">here</a>.</li
-          >
-          <li>Make sure that you have already created the vehicles in Hammond platform.</li>
-          <li>Make sure that the Vehicle nickname in Hammond is exactly the same as the name on Fuelly CSV or the import will not work.</li>
-          <li
-            >Make sure that the <u>Currency</u> and <u>Distance Unit</u> are set correctly in Hammond. Import will not autodetect Currency from the
-            CSV but use the one set for the user.</li
+            >Make sure that the <u>Currency</u> and <u>Distance Unit</u> are set correctly in Hammond. Drivvo does not include this information in
+            their export, instead Hammond will use the values set for the user.</li
           >
           <li>Similiarly, make sure that the <u>Fuel Unit</u> and <u>Fuel Type</u> are correctly set in the Vehicle.</li>
-          <li>Once you have checked all these points,just import the CSV below.</li>
-          <li><b>Make sure that you do not import the file again and that will create repeat entries.</b></li>
+          <li>Once you have checked all these points, select the vehicle and import the CSV below.</li>
+          <li><b>Make sure that you do not import the file again as that will create repeat entries.</b></li>
         </ol>
       </div>
     </div>
+    <p
+      ><b>PS:</b> If you have <em>'income'</em> and <em>'trips'</em> in your export, they will not be imported to Hammond. The fields
+      <em>'Second fuel'</em> and <em>'Third fuel'</em> are are are also ignored as the use case for these is not understood by us. If you have a use
+      case for this, please open a issue on
+      <a href="https://github.com/akhilrex/hammond/issues">issue tracker</a>
+    </p>
     <div class="section box">
-      <div class="columns">
-        <div class="column is-two-thirds"> <p class="subtitle">Choose the Fuelly CSV and press the import button.</p></div>
-        <div class="column is-one-third is-flex is-align-content-center">
-          <form @submit.prevent="importFuelly">
-            <div class="columns"
-              ><div class="column">
+      <div class="columns is-multiline">
+        <div class="column is-full"> <p class="subtitle">Choose the vehicle, then select the Drivvo CSV and press the import button.</p></div>
+        <div class="column is-full is-flex is-align-content-center">
+          <form @submit.prevent="importDrivvo">
+            <div class="columns">
+              <div class="column">
+                <b-field label="Vehicle" label-position="on-border">
+                  <b-select v-model="selectedVehicle" placeholder="Select Vehicle" required>
+                    <option v-for="vehicle in myVehicles" :key="vehicle.id" :value="vehicle.id">{{ vehicle.nickname }}</option>
+                  </b-select>
+                </b-field>
+              </div>
+              <div class="column">
+                <b-field>
+                  <b-tooltip label="Whether to import the location for fillups and services or not." multilined>
+                    <b-checkbox v-model="importLocation">Import Location?</b-checkbox>
+                  </b-tooltip>
+                </b-field>
+              </div>
+
+              <div class="column">
                 <b-field class="file is-primary" :class="{ 'has-name': !!file }">
                   <b-upload v-model="file" class="file-label" accept=".csv" required>
                     <span class="file-cta">
