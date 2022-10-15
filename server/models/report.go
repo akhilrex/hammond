@@ -14,7 +14,7 @@ type MileageModel struct {
 	FuelQuantity float32     `form:"fuelQuantity" json:"fuelQuantity" binding:"required"`
 	PerUnitPrice float32     `form:"perUnitPrice" json:"perUnitPrice" binding:"required"`
 	Currency     string      `json:"currency"`
-
+	DistanceUnit db.DistanceUnit `form:"distanceUnit" json:"distanceUnit"`
 	Mileage     float32 `form:"mileage" json:"mileage" binding:"mileage"`
 	CostPerMile float32 `form:"costPerMile" json:"costPerMile" binding:"costPerMile"`
 	OdoReading  int     `form:"odoReading" json:"odoReading" binding:"odoReading"`
@@ -35,4 +35,5 @@ func (b *MileageModel) MarshalJSON() ([]byte, error) {
 
 type MileageQueryModel struct {
 	Since time.Time `json:"since" query:"since" form:"since"`
+	MileageOption string `json:"mileageOption" query:"mileageOption" form:"mileageOption"`
 }

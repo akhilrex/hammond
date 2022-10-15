@@ -25,7 +25,7 @@ func getMileageForVehicle(c *gin.Context) {
 			return
 		}
 
-		fillups, err := service.GetMileageByVehicleId(searchByIdQuery.Id, model.Since)
+		fillups, err := service.GetMileageByVehicleId(searchByIdQuery.Id, model.Since, model.MileageOption)
 		if err != nil {
 			c.JSON(http.StatusUnprocessableEntity, common.NewError("getMileageForVehicle", err))
 			return
