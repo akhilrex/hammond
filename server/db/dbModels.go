@@ -196,3 +196,50 @@ type VehicleAttachment struct {
 	VehicleID    string `gorm:"primaryKey" json:"vehicleId"`
 	Title        string `json:"title"`
 }
+
+type VehicleAlert struct {
+	Base
+	VehicleID       string         `json:"vehicleId"`
+	Vehicle         Vehicle        `json:"-"`
+	UserID          string         `json:"userId"`
+	User            User           `json:"user"`
+	Title           string         `json:"title"`
+	Comments        string         `json:"comments"`
+	StartDate       time.Time      `json:"date"`
+	StartOdoReading int            `json:"startOdoReading"`
+	DistanceUnit    DistanceUnit   `json:"distanceUnit"`
+	AlertFrequency  AlertFrequency `json:"alertFrequency"`
+	OdoFrequency    int            `json:"odoFrequency"`
+	DayFrequency    int            `json:"dayFrequency"`
+	AlertAllUsers   bool           `json:"alertAllUsers"`
+	IsActive        bool           `json:"isActive"`
+	EndDate         *time.Time     `json:"endDate"`
+	AlertType       AlertType      `json:"alertType"`
+}
+type AlertOccurance struct {
+	Base
+	VehicleID        string       `json:"vehicleId"`
+	Vehicle          Vehicle      `json:"-"`
+	VehicleAlertID   string       `json:"vehicleAlertId"`
+	VehicleAlert     VehicleAlert `json:"-"`
+	UserID           string       `json:"userId"`
+	User             User         `json:"-"`
+	OdoReading       int          `json:"odoReading"`
+	Date             *time.Time   `json:"date"`
+	ProcessDate      *time.Time   `json:"processDate"`
+	AlertProcessType AlertType    `json:"alertProcessType"`
+	CompleteDate     *time.Time   `json:"completeDate"`
+}
+
+type Notification struct {
+	Base
+	Title      string     `json:"title"`
+	Content    string     `json:"content"`
+	UserID     string     `json:"userId"`
+	VehicleID  string     `json:"vehicleId"`
+	User       User       `json:"-"`
+	Date       time.Time  `json:"date"`
+	ReadDate   *time.Time `json:"readDate"`
+	ParentID   string     `json:"parentId"`
+	ParentType string     `json:"parentType"`
+}

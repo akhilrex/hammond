@@ -199,14 +199,21 @@ export default {
         return
       }
       this.tryingToUpload = true
+
       const formData = new FormData()
       formData.append('file', this.file, this.file.name)
       formData.append('title', this.title)
-      axios
-        .post(`/api/vehicles/${this.vehicle.id}/attachments`, formData)
+      // const config = { headers: { 'Content-Type': 'multipart/form-data; boundary=' + formData._boundary } }
+      fetch(`/api/vehicles/${this.vehicle.id}/attachments`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: this.currentUser.token,
+        },
+      })
         .then((data) => {
           this.$buefy.toast.open({
-            message: 'Quick Entry Created Successfully',
+            message: 'File uploaded Successfully',
             type: 'is-success',
             duration: 3000,
           })

@@ -8,7 +8,7 @@
   </a> -->
 
   <h1 align="center" style="margin-bottom:0">Hammond</h1>
-  <p align="center">Current Version - 2021.09.20</p>
+  <p align="center">Current Version - 2022.07.06</p>
 
   <p align="center">
     A self-hosted vehicle expense tracking system with support for multiple users.
@@ -35,6 +35,7 @@
   - [Built With](#built-with)
   - [Features](#features)
 - [Installation](#installation)
+- [Contributing](#contributing)
 - [License](#license)
 - [Roadmap](#roadmap)
 - [Contact](#contact)
@@ -156,6 +157,31 @@ You will have to provide your name, email and password so that an admin user can
 Once done you will be taken to the login page.
 
 Go through the settings page once and change relevant settings before you start adding vehicles and expenses.
+
+## Contributing
+
+### Dev Setup
+
+If you want to contribute to the project you need to set it up
+for development first.
+
+Fork and clone the project. Once you have it on your own machine,
+open up a terminal and navigate to the `server/` directory.
+
+In the `server/` directory run the command `go run main.go`.
+After some initial
+setup, the server should be listening on at port `3000`.
+
+Next, open a new terminal. Navigate to the `ui/` directory and run `npm install`.
+This will install all the dependencies for the frontend.
+After the command is done running, run `npm run dev`. After some output, the
+frontend should be accessible at `http://localhost:8080`.
+
+If you are sent straight to the login screen, try closing the page and opening
+it again. You should be greeted with a setup wizard the first time you run the
+project.
+
+Now, simply follow the instructions in order to set up your fresh install.
 
 ## License
 

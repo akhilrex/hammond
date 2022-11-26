@@ -36,6 +36,21 @@ const (
 	USER
 )
 
+type AlertFrequency int
+
+const (
+	ONETIME AlertFrequency = iota
+	RECURRING
+)
+
+type AlertType int
+
+const (
+	DISTANCE AlertType = iota
+	TIME
+	BOTH
+)
+
 type EnumDetail struct {
 	Short string `json:"short"`
 	Long  string `json:"long"`

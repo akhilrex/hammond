@@ -44,6 +44,20 @@ export default {
 
       return this.changePassModel.new === this.changePassModel.renew
     },
+    filteredCurrencyMasters() {
+      return this.currencyMasters.filter((option) => {
+        return (
+          option.namePlural
+            .toString()
+            .toLowerCase()
+            .indexOf(this.settingsModel.currency.toLowerCase()) >= 0 ||
+          option.code
+            .toString()
+            .toLowerCase()
+            .indexOf(this.settingsModel.currency.toLowerCase()) >= 0
+        )
+      })
+    },
   },
   methods: {
     changePassword() {
@@ -109,6 +123,9 @@ export default {
           this.tryingToSave = false
         })
     },
+    formatCurrency(option) {
+      return `${option.namePlural} (${option.code})`
+    },
   },
 }
 </script>
@@ -123,11 +140,16 @@ export default {
             These will be used as default values whenever you create a new fillup or expense.
           </h1>
           <b-field label="Currency">
-            <b-select v-model="settingsModel.currency" placeholder="Currency" required expanded>
-              <option v-for="option in currencyMasters" :key="option.code" :value="option.code">
-                {{ `${option.namePlural} (${option.code})` }}
-              </option>
-            </b-select>
+            <b-autocomplete
+              v-model="settingsModel.currency"
+              :custom-formatter="formatCurrency"
+              placeholder="Currency"
+              :data="filteredCurrencyMasters"
+              :keep-first="true"
+              :open-on-focus="true"
+              required
+              @select="(option) => (selected = option)"
+            ></b-autocomplete>
           </b-field>
           <b-field label="Distance Unit">
             <b-select v-model.number="settingsModel.distanceUnit" placeholder="Distance Unit" required expanded>
@@ -181,7 +203,7 @@ export default {
         <table class="table is-hoverable">
           <tr>
             <td>Current Version</td>
-            <td>2021.09.20</td>
+            <td>2022.07.06</td>
           </tr>
           <tr>
             <td>Website</td>
