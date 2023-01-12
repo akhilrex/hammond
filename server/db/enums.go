@@ -59,24 +59,24 @@ type EnumDetail struct {
 var FuelUnitDetails map[FuelUnit]EnumDetail = map[FuelUnit]EnumDetail{
 	LITRE: {
 		Short: "Lt",
-		Long:  "Litre",
+		Long:  "litre",
 	},
 	GALLON: {
 		Short: "Gal",
-		Long:  "Gallon",
+		Long:  "gallon",
 	}, KILOGRAM: {
 		Short: "Kg",
-		Long:  "Kilogram",
+		Long:  "kilogram",
 	}, KILOWATT_HOUR: {
 		Short: "KwH",
-		Long:  "Kilowatt Hour",
+		Long:  "kilowatthour",
 	}, US_GALLON: {
 		Short: "US Gal",
-		Long:  "US Gallon",
+		Long:  "usgallon",
 	},
 	MINUTE: {
 		Short: "Mins",
-		Long:  "Minutes",
+		Long:  "minutes",
 	},
 }
 

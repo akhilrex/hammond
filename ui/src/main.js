@@ -24,6 +24,7 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import i18n from './i18n';
 
 import App from './app.vue'
 
@@ -54,6 +55,7 @@ library.add(
   faUserFriends,
   faTimesCircle
 )
+
 Vue.use(Buefy, {
   defaultIconComponent: 'vue-fontawesome',
   defaultIconPack: 'fas',
@@ -73,6 +75,7 @@ const app = new Vue({
   store,
 
   render: (h) => h(App),
+  i18n,
 }).$mount('#app')
 
 // If running e2e tests...

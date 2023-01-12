@@ -28,7 +28,7 @@ export default {
     <h1>
       <BaseIcon name="user" />
       {{ user.name }}
-      Profile
+      {{ $t('profile') }}
     </h1>
     <pre>{{ user }}</pre>
   </Layout>

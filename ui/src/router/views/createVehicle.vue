@@ -74,7 +74,7 @@ export default {
           .put(`/api/vehicles/${this.vehicle.id}`, this.vehicleModel)
           .then((data) => {
             this.$buefy.toast.open({
-              message: 'Vehicle Updated Successfully',
+              message: this.$t('vehiclesavedsuccessfully'),
               type: 'is-success',
               duration: 3000,
             })
@@ -96,7 +96,7 @@ export default {
           .post(`/api/vehicles`, this.vehicleModel)
           .then((data) => {
             this.$buefy.toast.open({
-              message: 'Vehicle Created Successfully',
+              message: this.$t('vehiclesavedsuccessfully'),
               type: 'is-success',
               duration: 3000,
             })
@@ -123,57 +123,57 @@ export default {
   <Layout>
     <div class="columns">
       <div class="column is-three-quarters">
-        <h1 class="title">Create Vehicle</h1>
+        <h1 class="title">{{ $t('createvehicle') }}</h1>
       </div>
       <div class="column is-one-quarter">
         <router-link tag="b-button" type="is-primary" to="/">
-          Back to Vehicle
+          {{ $t('back') }}
         </router-link>
       </div>
     </div>
     <form @submit.prevent="createVehicle">
-      <b-field label="Nickname*">
+      <b-field :label="this.$t('nickname') + `*`">
         <b-input v-model="vehicleModel.nickname" type="text" expanded required></b-input>
       </b-field>
-      <b-field label="Registration*">
+      <b-field :label="this.$t('registration') + `*`">
         <b-input v-model="vehicleModel.registration" type="text" expanded required></b-input>
       </b-field>
-      <b-field label="Fuel Type*">
-        <b-select v-model.number="vehicleModel.fuelType" placeholder="Fuel Type" required expanded>
+      <b-field :label="this.$t('fueltype') + `*`">
+        <b-select v-model.number="vehicleModel.fuelType" :placeholder="this.$t('fueltype')" required expanded>
           <option v-for="(option, key) in fuelTypeMasters" :key="key" :value="key">
-            {{ option.long }}
+            {{ $t('fuel.' + option.long) }}
           </option>
         </b-select>
       </b-field>
 
-      <b-field label="Fuel Unit*">
-        <b-select v-model.number="vehicleModel.fuelUnit" placeholder="Fuel Unit" required expanded>
+      <b-field :label="this.$t('fuelunit') + `*`">
+        <b-select v-model.number="vehicleModel.fuelUnit" :placeholder="this.$t('fuelunit')" required expanded>
           <option v-for="(option, key) in fuelUnitMasters" :key="key" :value="key">
-            {{ option.long }}
+            {{ $t('unit.long.' + option.long) }}
           </option>
         </b-select>
       </b-field>
 
-      <b-field label="Make / Company*">
+      <b-field :label="this.$t('make') + `*`">
         <b-input v-model="vehicleModel.make" type="text" required expanded></b-input>
       </b-field>
-      <b-field label="Model*">
+      <b-field :label="this.$t('model') + `*`">
         <b-input v-model="vehicleModel.model" type="text" required expanded></b-input>
       </b-field>
-      <b-field label="Year Of Manufacture">
+      <b-field :label="this.$t('yearmanufacture') + `*`">
         <b-input v-model.number="vehicleModel.yearOfManufacture" type="number" expanded number></b-input>
       </b-field>
-      <b-field label="Engine Size (in cc)">
+      <b-field :label="this.$t('yearmanufacture')">
         <b-input v-model.number="vehicleModel.engineSize" type="number" expanded number></b-input>
       </b-field>
 
       <br />
       <b-field>
-        <b-button tag="input" native-type="submit" :disabled="tryingToCreate" type="is-primary" label="Create Vehicle" expanded>
+        <b-button tag="input" native-type="submit" :disabled="tryingToCreate" type="is-primary" :value="this.$t('save')" :label="this.$t('createvehicle')" expanded>
           <BaseIcon v-if="tryingToCreate" name="sync" spin />
         </b-button>
         <p v-if="authError">
-          There was an error logging in to your account.
+          {{ $t('loginerror') }}
         </p>
       </b-field>
     </form>

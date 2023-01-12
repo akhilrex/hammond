@@ -106,7 +106,7 @@ export default {
         .dispatch(`utils/saveUserSettings`, { settings: this.settingsModel })
         .then((data) => {
           this.$buefy.toast.open({
-            message: 'Settings saved successfully',
+            message: this.$t('settingssaved'),
             type: 'is-success',
             duration: 3000,
           })
@@ -132,18 +132,18 @@ export default {
 
 <template>
   <Layout>
-    <h1 class="title">Your Settings</h1>
+    <h1 class="title">{{ $t('yoursettings') }}</h1>
     <div class="columns"
       ><div class="column">
         <form class="box " @submit.prevent="saveSettings">
           <h1 class="subtitle">
             These will be used as default values whenever you create a new fillup or expense.
           </h1>
-          <b-field label="Currency">
+          <b-field :label="$t('currency')">
             <b-autocomplete
               v-model="settingsModel.currency"
               :custom-formatter="formatCurrency"
-              placeholder="Currency"
+              :placeholder="$t('currency')"
               :data="filteredCurrencyMasters"
               :keep-first="true"
               :open-on-focus="true"
@@ -151,14 +151,14 @@ export default {
               @select="(option) => (selected = option)"
             ></b-autocomplete>
           </b-field>
-          <b-field label="Distance Unit">
+          <b-field :label="$t('distanceunit')">
             <b-select v-model.number="settingsModel.distanceUnit" placeholder="Distance Unit" required expanded>
               <option v-for="(option, key) in distanceUnitMasters" :key="key" :value="key">
                 {{ `${option.long} (${option.short})` }}
               </option>
             </b-select>
           </b-field>
-          <b-field label="Date Format">
+          <b-field :label="$t('dateformat')">
             <b-select v-model.number="settingsModel.dateFormat" placeholder="Date Format" required expanded>
               <option v-for="option in dateFormatMasters" :key="option" :value="option">
                 {{ `${option}` }}
@@ -167,25 +167,25 @@ export default {
           </b-field>
           <br />
           <b-field>
-            <b-button tag="input" native-type="submit" :disabled="tryingToSave" type="is-primary" value="Save" expanded> </b-button>
+            <b-button tag="input" native-type="submit" :disabled="tryingToSave" type="is-primary" :value="$t('save')" expanded> </b-button>
           </b-field>
         </form>
       </div>
       <div class="column">
         <form class="box" @submit.prevent="changePassword">
-          <h1 class="subtitle">Change password</h1>
-          <b-field label="Old Password">
+          <h1 class="subtitle">{{ $t('changepassword') }}</h1>
+          <b-field :label="$t('oldpassword')">
             <b-input v-model="changePassModel.old" required minlength="6" password-reveal type="password"></b-input>
           </b-field>
-          <b-field label="New Password">
+          <b-field :label="$t('newpassword')">
             <b-input v-model="changePassModel.new" required minlength="6" password-reveal type="password"></b-input>
           </b-field>
-          <b-field label="Repeat New Password">
+          <b-field :label="$t('repeatnewpassword')">
             <b-input v-model="changePassModel.renew" required minlength="6" password-reveal type="password"></b-input>
           </b-field>
-          <p v-if="!passwordValid" class="help is-danger">Password values don't match</p>
+          <p v-if="!passwordValid" class="help is-danger">{{ $t('passworddontmatch') }}</p>
           <b-field>
-            <b-button tag="input" native-type="submit" :disabled="!passwordValid" type="is-primary" value="Change Password" expanded> </b-button>
+            <b-button tag="input" native-type="submit" :disabled="!passwordValid" type="is-primary" :value="$t('changepassword')" expanded> </b-button>
           </b-field>
         </form>
       </div>
@@ -193,7 +193,7 @@ export default {
     <hr />
     <div class="columns">
       <div class="twelve">
-        <h3 class="title">More Info</h3>
+        <h3 class="title">{{ $t('moreinfo') }}</h3>
         <p style="font-style: italic;">
           This project is under active development which means I release new updates very frequently. I will eventually build the version
           management/update checking mechanism. Until then it is recommended that you use something like watchtower which will automatically update
@@ -202,7 +202,7 @@ export default {
         <br />
         <table class="table is-hoverable">
           <tr>
-            <td>Current Version</td>
+            <td>{{ $t('currentversion') }}</td>
             <td>2022.07.06</td>
           </tr>
           <tr>
@@ -210,7 +210,7 @@ export default {
             <td><a href="https://github.com/akhilrex/hammond" target="_blank">https://github.com/akhilrex/hammond</a></td>
           </tr>
           <tr>
-            <td>Found a bug</td>
+            <td>{{ $t('foundabug') }}</td>
             <td
               ><a
                 href="https://github.com/akhilrex/hammond/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
@@ -221,7 +221,7 @@ export default {
             >
           </tr>
           <tr>
-            <td>Feature Request</td>
+            <td>{{ $t('featurerequest') }}</td>
             <td
               ><a
                 href="https://github.com/akhilrex/hammond/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
@@ -232,8 +232,8 @@ export default {
             >
           </tr>
           <tr>
-            <td>Support the developer</td>
-            <td><a href="https://www.buymeacoffee.com/akhilrex" target="_blank" rel="noopener noreferrer">Buy him a beer!</a></td>
+            <td>{{ $t('supportthedeveloper') }}</td>
+            <td><a href="https://www.buymeacoffee.com/akhilrex" target="_blank" rel="noopener noreferrer">{{ $t('buyhimabeer') }}</a></td>
           </tr>
         </table>
       </div>

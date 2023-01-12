@@ -30,7 +30,7 @@ export default {
       var labels = this.chartData.map((x) => x.date.substr(0, 10))
       var dataset = {
         steppedLine: true,
-        label: `Mileage (${this.user.distanceUnitDetail.short}/${this.vehicle.fuelUnitDetail.short})`,
+        label: `${this.$t('odometer')} (${this.user.distanceUnitDetail.short}/${this.vehicle.fuelUnitDetail.short})`,
         fill: true,
         data: this.chartData.map((x) => x.mileage),
       }

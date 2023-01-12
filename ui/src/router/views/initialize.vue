@@ -62,11 +62,11 @@ export default {
       var message = ''
       if (this.migrationMode === 'clarkson') {
         message =
-          'We have successfully migrated the data from Clarkson. You will be redirected to the login screen shortly where you can login using your existing email and password : hammond'
+          this.$t('init.clarkson.success')
       }
       if (this.migrationMode === 'fresh') {
         message =
-          'You have been registered successfully. You will be redirected to the login screen shortly where you can login and start using the system.'
+          this.$t('init.fresh.success')
       }
       this.$buefy.toast.open({
         duration: 10000,
@@ -163,68 +163,57 @@ export default {
 <template>
   <Layout>
     <div v-if="!migrationMode" class="box">
-      <h1 class="title">Migrate from Clarkson</h1>
+      <h1 class="title">{{ $t('init.migrateclarkson') }}</h1>
       <p>
-        If you have an existing Clarkson deployment and you want to migrate your data from that, press the following button.
+        {{ $t('init.migrateclarksondesc') }}
       </p>
       <br />
-      <b-field> <b-button type="is-primary" @click="migrationMode = 'clarkson'">Migrate from Clarkson</b-button></b-field>
+      <b-field> <b-button type="is-primary" @click="migrationMode = 'clarkson'">{{ $t('init.migrateclarkson') }}</b-button></b-field>
     </div>
     <div v-if="!migrationMode" class="box">
-      <h1 class="title">Fresh Install</h1>
+      <h1 class="title">{{ $t('init.freshinstall') }}</h1>
       <p>
-        If you want a fresh install of Hammond, press the following button.
+        {{ $t('init.freshinstalldesc') }}
       </p>
       <br />
       <b-field>
-        <b-button type="is-primary" @click="migrationMode = 'fresh'">Fresh Install</b-button>
+        <b-button type="is-primary" @click="migrationMode = 'fresh'">{{ $t('init.freshinstall') }}</b-button>
       </b-field>
     </div>
     <div v-if="migrationMode === 'clarkson'" class="box content">
-      <h1 class="title">Migrate from Clarkson</h1>
-      <p>You need to make sure that this deployment of Hammond can access the MySQL database used by Clarkson.</p>
-      <p>If that is not directly possible, you can make a copy of that database somewhere accessible from this instance.</p>
-      <p>Once that is done, enter the connection string to the MySQL instance in the following format.</p>
-      <p
-        >All the users imported from Clarkson will have their username as their email in Clarkson database and pasword set to
-        <span class="" style="font-weight:bold">hammond</span></p
-      >
-      <code>
-        user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
-      </code>
-      <br />
-      <br />
+      <h1 class="title">{{ $t('init.migrateclarkson') }}</h1>
+      <p v-html="$t('init.clarkson.desc')"></p>
       <b-notification v-if="connectionError" type="is-danger" role="alert" :closable="false">
         {{ connectionError }}
       </b-notification>
 
-      <b-field addons label="Mysql Connection String">
+      <b-field addons :label="this.$t('mysqlconnstr')">
         <b-input v-model="url" required></b-input>
       </b-field>
 
       <div class="buttons">
-        <b-button v-if="!testSuccess" type="is-primary" :disabled="isWorking" @click="testConnection">Test Connection</b-button
-        ><b-button v-if="testSuccess" type="is-success" :disabled="isWorking" @click="migrate">Migrate</b-button>
-        <b-button type="is-danger is-light" @click="resetMigrationMode">Cancel</b-button>
+        <b-button v-if="!testSuccess" type="is-primary" :disabled="isWorking" @click="testConnection">{{ $t('testconn') }}</b-button>
+        <b-button v-if="testSuccess" type="is-success" :disabled="isWorking" @click="migrate">{{ $t('migrate') }}</b-button>
+        <b-button type="is-danger is-light" @click="resetMigrationMode">{{ $t('cancel') }}</b-button>
       </div>
     </div>
     <div v-if="migrationMode === 'fresh'" class="box content">
-      <h1 class="title">Setup Admin Users</h1>
+      <h1 class="title">{{ $t('init.fresh.setupadminuser') }}</h1>
       <form @submit.prevent="register">
-        <b-field label="Your Name">
+        <b-field :label="this.$t('init.fresh.yourname')">
           <b-input v-model="registerModel.name" required></b-input>
         </b-field>
-        <b-field label="Your Email">
+        <b-field :label="this.$t('init.fresh.youremail')">
           <b-input v-model="registerModel.email" type="email" required></b-input>
         </b-field>
-        <b-field label="Your Password">
+        <b-field :label="this.$t('init.fresh.yourpassword')">
           <b-input v-model="registerModel.password" type="password" required minlength="8" password-reveal></b-input>
         </b-field>
-        <b-field label="Currency">
+        <b-field :label="this.$t('currency')">
           <b-autocomplete
             v-model="registerModel.currency"
             :custom-formatter="formatCurrency"
-            placeholder="Currency"
+            :placeholder="this.$t('currency')"
             :data="filteredCurrencyMasters"
             :keep-first="true"
             :open-on-focus="true"
@@ -232,8 +221,8 @@ export default {
             @select="(option) => (selected = option)"
           ></b-autocomplete>
         </b-field>
-        <b-field label="Distance Unit">
-          <b-select v-model.number="registerModel.distanceUnit" placeholder="Distance Unit" required expanded>
+        <b-field :label="this.$t('distanceunit')">
+          <b-select v-model.number="registerModel.distanceUnit" :placeholder="this.$t('distanceunit')" required expanded>
             <option v-for="(option, key) in distanceUnitMasters" :key="key" :value="key">
               {{ `${option.long} (${option.short})` }}
             </option>
@@ -241,9 +230,9 @@ export default {
         </b-field>
         <br />
         <div class="buttons">
-          <b-button type="is-primary" native-type="submit" tag="input"></b-button>
+          <b-button type="is-primary" native-type="submit" tag="input" :value="this.$t('save')"></b-button>
 
-          <b-button type="is-danger is-light" @click="resetMigrationMode">Cancel</b-button>
+          <b-button type="is-danger is-light" @click="resetMigrationMode">{{ $t('cancel') }}</b-button>
         </div>
       </form>
     </div>

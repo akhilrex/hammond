@@ -95,7 +95,7 @@ export default {
           .put(`/api/vehicles/${this.selectedVehicle.id}/expenses/${this.expense.id}`, this.expenseModel)
           .then((data) => {
             this.$buefy.toast.open({
-              message: 'Expense Updated Successfully',
+              message: this.$t('expensesavedsuccessfully'),
               type: 'is-success',
               duration: 3000,
             })
@@ -120,7 +120,7 @@ export default {
           .post(`/api/vehicles/${this.selectedVehicle.id}/expenses`, this.expenseModel)
           .then((data) => {
             this.$buefy.toast.open({
-              message: 'Expense Created Successfully',
+              message: this.$t('expensesavedsuccessfully'),
               type: 'is-success',
               duration: 3000,
             })
@@ -152,7 +152,7 @@ export default {
   <Layout>
     <div class="columns">
       <div class="column is-two-thirds">
-        <h1 class="title">Create Expense</h1>
+        <h1 class="title">{{ $t('createexpense') }}</h1>
         <h1 class="subtitle">
           {{ [selectedVehicle.nickname, selectedVehicle.registration, selectedVehicle.make, selectedVehicle.model].join(' | ') }}
         </h1>
@@ -162,41 +162,41 @@ export default {
       </div>
     </div>
     <form @submit.prevent="createExpense">
-      <b-field label="Select a vehicle">
-        <b-select v-model="selectedVehicle" placeholder="Vehicle" required expanded :disabled="expense.id">
+      <b-field :label="this.$t('selectvehicle')">
+        <b-select v-model="selectedVehicle" :placeholder="this.$t('vehicle')" required expanded :disabled="expense.id">
           <option v-for="option in myVehicles" :key="option.id" :value="option">
             {{ option.nickname }}
           </option>
         </b-select>
       </b-field>
-      <b-field label="Expense by">
-        <b-select v-model="expenseModel.userId" placeholder="User" required expanded :disabled="expense.id">
+      <b-field :label="this.$t('expenseby')">
+        <b-select v-model="expenseModel.userId" :placeholder="this.$t('user')" required expanded :disabled="expense.id">
           <option v-for="option in users" :key="option.userId" :value="option.userId">
             {{ option.name }}
           </option>
         </b-select>
       </b-field>
-      <b-field label="Expense Date">
+      <b-field :label="this.$t('expensedate')">
         <b-datepicker
           v-model="expenseModel.date"
           :date-formatter="formatDate"
-          placeholder="Click to select..."
+          :placeholder="this.$t('clicktoselect')"
           icon="calendar"
           :max-date="new Date()"
         >
         </b-datepicker>
       </b-field>
-      <b-field label="Expense Type*">
+      <b-field :label="this.$t('expensetype') + `*`">
         <b-input v-model="expenseModel.expenseType" expanded required></b-input>
       </b-field>
 
-      <b-field label="Total Amount Paid">
+      <b-field :label="this.$t('totalamountpaid')">
         <p class="control">
           <span class="button is-static">{{ me.currency }}</span>
         </p>
         <b-input v-model.number="expenseModel.amount" type="number" min="0" expanded step=".001" required></b-input>
       </b-field>
-      <b-field label="Odometer Reading">
+      <b-field :label="this.$t('odometer')">
         <p class="control">
           <span class="button is-static">{{ me.distanceUnitDetail.short }}</span>
         </p>
@@ -204,19 +204,19 @@ export default {
       </b-field>
 
       <b-field>
-        <b-switch v-model="showMore">Fill more details</b-switch>
+        <b-switch v-model="showMore">{{ $t('fillmoredetails') }}</b-switch>
       </b-field>
       <fieldset v-if="showMore">
-        <b-field label="Comments">
+        <b-field :label="this.$t('details')">
           <b-input v-model="expenseModel.comments" type="textarea" expanded></b-input>
         </b-field>
       </fieldset>
       <b-field>
-        <b-switch v-if="quickEntry" v-model="processQuickEntry">Mark selected Quick Entry as processed</b-switch>
+        <b-switch v-if="quickEntry" v-model="processQuickEntry">{{ $t('markquickentryprocessed') }}</b-switch>
       </b-field>
       <br />
       <b-field>
-        <b-button tag="input" native-type="submit" :disabled="tryingToCreate" type="is-primary" label="Create Expense" expanded> </b-button>
+        <b-button tag="input" native-type="submit" :value="this.$t('save')" :disabled="tryingToCreate" type="is-primary" label="Create Expense" expanded> </b-button>
       </b-field>
     </form>
   </Layout>
