@@ -81,12 +81,12 @@
     "quantity": "Quantity",
     "gasstation": "Gas Station",
     "fuel": {
-      "Petrol": "Petrol",
-      "Diesel": "Diesel",
-      "CNG": "CNG",
-      "LPG": "LPG",
-      "Electric": "Electric",
-      "Ethanol": "Ethanol"
+      "petrol": "Petrol",
+      "diesel": "Diesel",
+      "cng": "CNG",
+      "lpg": "LPG",
+      "electric": "Electric",
+      "ethanol": "Ethanol"
     },
     "unit": {
       "long": {
@@ -95,7 +95,9 @@
         "kilowatthour": "Kilowatt Hour",
         "kilogram": "Kilogram",
         "usgallon": "US Gallon",
-        "minutes": "Minutes"
+        "minutes": "Minutes",
+        "kilometers": "Kilometers",
+        "miles": "Miles"
       },
       "short": {
         "litre": "Lt",
@@ -103,7 +105,9 @@
         "kilowatthour": "KwH",
         "kilogram": "Kg",
         "usgallon": "US Gal",
-        "minutes": "Mins"
+        "minutes": "Mins",
+        "kilometers": "Km",
+        "miles": "Mi"
       }
     },
     "avgfillupqty": "Avg Fillup Qty",
@@ -190,6 +194,10 @@
         "yourname": "Your Name",
         "success": "You have been registered successfully. You will be redirected to the login screen shortly where you can login and start using the system."
       }
+    },
+    "roles": {
+      "ADMIN": "ADMIN",
+      "USER": "USER"
     },
     "profile": "Profile",
     "processedon": "Processed on",

@@ -78,12 +78,12 @@
     "quantity": "Menge",
     "gasstation": "Tankstelle",
     "fuel": {
-      "Petrol": "Benzin",
-      "Diesel": "Diesel",
-      "CNG": "CNG",
-      "LPG": "LPG",
-      "Electric": "Strom",
-      "Ethanol": "Ethanol"
+      "petrol": "Benzin",
+      "diesel": "Diesel",
+      "cng": "CNG",
+      "lpg": "LPG",
+      "electric": "Strom",
+      "ethanol": "Ethanol"
     },
     "unit": {
       "long": {
@@ -92,7 +92,9 @@
         "kilowatthour": "Kilowattstunde",
         "kilogram": "Kilogramm",
         "usgallon": "US-Gallone",
-        "minutes": "Minuten"
+        "minutes": "Minuten",
+        "kilometers": "Kilometer",
+        "miles": "Meilen"
       },
       "short": {
         "litre": "L",
@@ -100,7 +102,9 @@
         "kilowatthour": "KwH",
         "kilogram": "Kg",
         "usgallon": "US-Gal",
-        "minutes": "Min"
+        "minutes": "Min",
+        "kilometers": "Km",
+        "miles": "Mi"
       }
     },
     "avgfillupqty": "Ø Tankmenge",
@@ -183,6 +187,10 @@
         "yourname": "Dein Name",
         "success": "Du hast dich erfolgreich registriert. Du wirst in kürze zur Anmeldung weitergeleitet und kannst Anfangen Hammond zu verwenden."
       }
+    },
+    "roles": {
+      "ADMIN": "Adminstrator",
+      "USER": "Benutzer"
     },
     "profile": "Profil",
     "processedon": "Bearbeitet am",

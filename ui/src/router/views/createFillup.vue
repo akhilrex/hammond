@@ -233,11 +233,11 @@ export default {
         <b-input v-model.number="fillupModel.fuelQuantity" type="number" step=".001" min="0" expanded required></b-input>
         <b-select v-model="fillupModel.fuelUnit" :placeholder="this.$t('fuelunit')" required>
           <option v-for="(option, key) in fuelUnitMasters" :key="key" :value="key">
-            {{ $t('unit.long.' + option.long) }}
+            {{ $t('unit.long.' + option.key) }}
           </option>
         </b-select>
       </b-field>
-      <b-field :label="this.$t('per', { '0': this.$t('price'), '1': vehicle.fuelUnitDetail.short })"
+      <b-field :label="this.$t('per', { '0': this.$t('price'), '1': $t('unit.short.' + vehicle.fuelUnitDetail.key) })"
         ><p class="control">
           <span class="button is-static">{{ me.currency }}</span>
         </p>
@@ -251,7 +251,7 @@ export default {
       </b-field>
       <b-field :label="this.$t('odometer')">
         <p class="control">
-          <span class="button is-static">{{ me.distanceUnitDetail.short }}</span>
+          <span class="button is-static">{{ $t('unit.short.' + me.distanceUnitDetail.key) }}</span>
         </p>
         <b-input v-model.number="fillupModel.odoReading" type="number" min="0" expanded required></b-input>
       </b-field>

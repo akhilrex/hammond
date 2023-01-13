@@ -52,75 +52,58 @@ const (
 )
 
 type EnumDetail struct {
-	Short string `json:"short"`
-	Long  string `json:"long"`
+	Key string `json:"key"`
 }
 
 var FuelUnitDetails map[FuelUnit]EnumDetail = map[FuelUnit]EnumDetail{
 	LITRE: {
-		Short: "Lt",
-		Long:  "litre",
+		Key:  "litre",
 	},
 	GALLON: {
-		Short: "Gal",
-		Long:  "gallon",
+		Key:  "gallon",
 	}, KILOGRAM: {
-		Short: "Kg",
-		Long:  "kilogram",
+		Key:  "kilogram",
 	}, KILOWATT_HOUR: {
-		Short: "KwH",
-		Long:  "kilowatthour",
+		Key:  "kilowatthour",
 	}, US_GALLON: {
-		Short: "US Gal",
-		Long:  "usgallon",
+		Key:  "usgallon",
 	},
 	MINUTE: {
-		Short: "Mins",
-		Long:  "minutes",
+		Key:  "minutes",
 	},
 }
 
 var FuelTypeDetails map[FuelType]EnumDetail = map[FuelType]EnumDetail{
 	PETROL: {
-		Short: "Petrol",
-		Long:  "Petrol",
+		Key:  "petrol",
 	},
 	DIESEL: {
-		Short: "Diesel",
-		Long:  "Diesel",
+		Key:  "diesel",
 	}, CNG: {
-		Short: "CNG",
-		Long:  "CNG",
+		Key:  "cng",
 	}, LPG: {
-		Short: "LPG",
-		Long:  "LPG",
+		Key:  "lpg",
 	}, ELECTRIC: {
-		Short: "Electric",
-		Long:  "Electric",
+		Key:  "electric",
 	}, ETHANOL: {
-		Short: "Ethanol",
-		Long:  "Ethanol",
+		Key:  "ethanol",
 	},
 }
 
 var DistanceUnitDetails map[DistanceUnit]EnumDetail = map[DistanceUnit]EnumDetail{
 	KILOMETERS: {
-		Short: "Km",
-		Long:  "Kilometers",
+		Key: "kilometers",
 	},
 	MILES: {
-		Short: "Mi",
-		Long:  "Miles",
+		Key: "miles",
 	},
 }
 
 var RoleDetails map[Role]EnumDetail = map[Role]EnumDetail{
 	ADMIN: {
-		Short: "Admin",
-		Long:  "ADMIN",
+		Key: "ADMIN",
 	},
 	USER: {
-		Short: "User",
-		Long:  "USER",
+		Key: "USER",
 	},
 }

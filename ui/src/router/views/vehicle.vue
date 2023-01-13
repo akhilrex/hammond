@@ -82,11 +82,11 @@ export default {
           },
           {
             label: this.$t('avgfillupqty'),
-            value: `${x.avgFuelQty} ${this.vehicle.fuelUnitDetail.short}`,
+            value: `${x.avgFuelQty} ${this.$t('unit.short.' + this.vehicle.fuelUnitDetail.key)}`,
           },
           {
             label: this.$t('avgfuelcost'),
-            value: this.$t('per', {'0': this.formatCurrency(x.avgFuelPrice, x.currency), '1': this.vehicle.fuelUnitDetail.short}),
+            value: this.$t('per', {'0': this.formatCurrency(x.avgFuelPrice, x.currency), '1': this.$t('unit.short.' + this.vehicle.fuelUnitDetail.key)}),
           },
         ]
       })
@@ -303,7 +303,7 @@ export default {
       <div class="column is-one-half" :class="isMobile ? 'has-text-centered' : ''">
         <p class="title">{{ vehicle.nickname }} - {{ vehicle.registration }}</p>
         <p class="subtitle">
-          {{ [vehicle.make, vehicle.model, this.$t('fuel.' + vehicle.fuelTypeDetail.short)].join(' | ') }}
+          {{ [vehicle.make, vehicle.model, this.$t('fuel.' + vehicle.fuelTypeDetail.key)].join(' | ') }}
 
           <template v-if="users.length > 1">
             | {{ $t("sharedwith") }} :
@@ -363,12 +363,12 @@ export default {
           {{ props.row.fuelSubType }}
         </b-table-column>
         <b-table-column v-slot="props" field="fuelQuantity" :label="this.$t('quantity')" :td-attrs="hiddenMobile" numeric>
-          {{ `${props.row.fuelQuantity} ${props.row.fuelUnitDetail.short}` }}
+          {{ `${props.row.fuelQuantity} ${$t('unit.short.' + props.row.fuelUnitDetail.key)}` }}
         </b-table-column>
         <b-table-column
           v-slot="props"
           field="perUnitPrice"
-          :label="this.$t('per', { '0': this.$t('price'), '1': vehicle.fuelUnitDetail.short })"
+          :label="this.$t('per', { '0': this.$t('price'), '1': this.$t('unit.short.' + vehicle.fuelUnitDetail.key) })"
           :td-attrs="hiddenMobile"
           numeric
           sortable
@@ -376,7 +376,7 @@ export default {
           {{ `${formatCurrency(props.row.perUnitPrice, props.row.currency)}` }}
         </b-table-column>
         <b-table-column v-if="isMobile" v-slot="props" field="totalAmount" :label="this.$t('total')" :td-attrs="hiddenDesktop" sortable numeric>
-          {{ `${me.currency} ${props.row.totalAmount}` }} ({{ `${props.row.fuelQuantity} ${props.row.fuelUnitDetail.short}` }} @
+          {{ `${me.currency} ${props.row.totalAmount}` }} ({{ `${props.row.fuelQuantity} ${$t('unit.short.' + props.row.fuelUnitDetail.key)}` }} @
           {{ `${me.currency} ${props.row.perUnitPrice}` }})
         </b-table-column>
         <b-table-column v-if="!isMobile" v-slot="props" field="totalAmount" :label="this.$t('total')" :td-attrs="hiddenMobile" sortable numeric>
@@ -386,7 +386,7 @@ export default {
           <b-icon pack="fas" :icon="props.row.isTankFull ? 'check' : 'times'" type="is-info"> </b-icon>
         </b-table-column>
         <b-table-column v-slot="props" field="odoReading" :label="this.$t('odometer')" :td-attrs="hiddenMobile" numeric>
-          {{ `${props.row.odoReading} ${me.distanceUnitDetail.short}` }}
+          {{ `${props.row.odoReading} ${$t('unit.short.' + me.distanceUnitDetail.key)}` }}
         </b-table-column>
         <b-table-column v-slot="props" field="fillingStation" :label="this.$t('gasstation')" :td-attrs="hiddenMobile">
           {{ `${props.row.fillingStation}` }}
@@ -433,7 +433,7 @@ export default {
         </b-table-column>
 
         <b-table-column v-slot="props" field="odoReading" :label="this.$t('odometer')" :td-attrs="columnTdAttrs" numeric>
-          {{ `${props.row.odoReading} ${me.distanceUnitDetail.short}` }}
+          {{ `${props.row.odoReading} ${$t('unit.short.' + me.distanceUnitDetail.key)}` }}
         </b-table-column>
 
         <b-table-column v-slot="props" field="userId" :label="this.$t('by')" :td-attrs="columnTdAttrs">

@@ -198,7 +198,7 @@ export default {
       </b-field>
       <b-field :label="this.$t('odometer')">
         <p class="control">
-          <span class="button is-static">{{ me.distanceUnitDetail.short }}</span>
+          <span class="button is-static">{{ $t('unit.short.' + me.distanceUnitDetail.key) }}</span>
         </p>
         <b-input v-model.number="expenseModel.odoReading" type="number" min="0" expanded required></b-input>
       </b-field>

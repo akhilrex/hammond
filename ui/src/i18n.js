@@ -16,62 +16,10 @@ function loadLocaleMessages () {
     return messages
   }
 
-const dateTimeFormats = {
-    'en-US': {
-      short: {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      },
-      long: {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long',
-        hour: 'numeric',
-        minute: 'numeric'
-      }
-    },
-    'de-DE': {
-      short: {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      },
-      long: {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: false
-      }
-    }
-  }
-
-const numberFormats = {
-    'en-US': {
-      currency: {
-        style: 'currency',
-        currency: 'USD'
-      }
-    },
-    'de-DE': {
-      currency: {
-        style: 'currency',
-        currency: 'EUR',
-        currencyDisplay: 'symbol'
-      }
-    }
-  }
-
 const i18n = new VueI18n({
     locale: navigator.language.split('-')[0] || 'en',
     fallbackLocale: 'en',
-    messages: loadLocaleMessages(),
-    numberFormats,
-    dateTimeFormats
+    messages: loadLocaleMessages()
 });
 
 export default i18n;

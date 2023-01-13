@@ -124,7 +124,7 @@ export default {
                     <div class="column"
                       >{{ formatDate(vehicle.fillups[0].date) }} <br />
                       {{ `${formatCurrency(vehicle.fillups[0].totalAmount)}` }} ({{
-                        `${vehicle.fillups[0].fuelQuantity} ${vehicle.fillups[0].fuelUnitDetail.short}`
+                        `${vehicle.fillups[0].fuelQuantity} ${ $t('unit.short.' + vehicle.fillups[0].fuelUnitDetail.key) }`
                       }}
                       @ {{ `${formatCurrency(vehicle.fillups[0].perUnitPrice)}` }})</div
                     >
@@ -135,7 +135,7 @@ export default {
                     <div class="column">
                       <template v-if="vehicle.fillups.length">
                         {{ vehicle.fillups[0].odoReading }}&nbsp;{{
-                          me.distanceUnitDetail.short
+                          $t('unit.short.' + me.distanceUnitDetail.key)
                         }}</template
                       >
                     </div>

@@ -154,7 +154,7 @@ export default {
           <b-field :label="$t('distanceunit')">
             <b-select v-model.number="settingsModel.distanceUnit" placeholder="Distance Unit" required expanded>
               <option v-for="(option, key) in distanceUnitMasters" :key="key" :value="key">
-                {{ `${option.long} (${option.short})` }}
+                {{ `${$t('unit.long.' + option.key)} (${$t('unit.short.' + option.key)})` }}
               </option>
             </b-select>
           </b-field>

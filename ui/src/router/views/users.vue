@@ -156,7 +156,7 @@ export default {
           <b-field :label="this.$t('role')">
             <b-select v-model.number="registerModel.role" :placeholder="this.$t('placeholder')" required expanded>
               <option v-for="(option, key) in roleMasters" :key="key" :value="key">
-                {{ `${option.long}` }}
+                {{ `test` }}
               </option>
             </b-select>
           </b-field>
@@ -175,7 +175,7 @@ export default {
               expanded
             >
               <option v-for="(option, key) in distanceUnitMasters" :key="key" :value="key">
-                {{ `${option.long} (${option.short})` }}
+                {{ `${$t('unit.long.' + option.key)} (${$t('unit.short.' + option.key)})` }}
               </option>
             </b-select>
           </b-field>
@@ -195,14 +195,14 @@ export default {
           {{ `${props.row.email}` }}
         </b-table-column>
         <b-table-column v-slot="props" field="role" :label="this.$t('role')">
-          {{ `${props.row.roleDetail.short}` }}
+          {{ `${$t('roles.' + props.row.roleDetail.key)}` }}
         </b-table-column>
         <b-table-column v-slot="props" field="createdAt" :label="this.$t('created')" sortable date>
           {{ formatDate(props.row.createdAt) }}
         </b-table-column>
          <b-table-column v-slot="props">
-           <b-button type="is-success" v-if="props.row.isDisabled && props.row.roleDetail.long === 'USER'" @click="changeDisabledStatus(props.row.id, false)">{{ $t('enable') }}</b-button>
-           <b-button type="is-danger" v-if="!props.row.isDisabled && props.row.roleDetail.long === 'USER'" @click="changeDisabledStatus(props.row.id, true)">{{ $t('disable') }}</b-button>
+           <b-button type="is-success" v-if="props.row.isDisabled && props.row.roleDetail.key === 'USER'" @click="changeDisabledStatus(props.row.id, false)">{{ $t('enable') }}</b-button>
+           <b-button type="is-danger" v-if="!props.row.isDisabled && props.row.roleDetail.key === 'USER'" @click="changeDisabledStatus(props.row.id, true)">{{ $t('disable') }}</b-button>
          </b-table-column>
       </b-table>
     </div>

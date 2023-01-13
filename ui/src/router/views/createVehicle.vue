@@ -141,7 +141,7 @@ export default {
       <b-field :label="this.$t('fueltype') + `*`">
         <b-select v-model.number="vehicleModel.fuelType" :placeholder="this.$t('fueltype')" required expanded>
           <option v-for="(option, key) in fuelTypeMasters" :key="key" :value="key">
-            {{ $t('fuel.' + option.long) }}
+            {{ $t('fuel.' + option.key) }}
           </option>
         </b-select>
       </b-field>
@@ -149,7 +149,7 @@ export default {
       <b-field :label="this.$t('fuelunit') + `*`">
         <b-select v-model.number="vehicleModel.fuelUnit" :placeholder="this.$t('fuelunit')" required expanded>
           <option v-for="(option, key) in fuelUnitMasters" :key="key" :value="key">
-            {{ $t('unit.long.' + option.long) }}
+            {{ $t('unit.long.' + option.key) }}
           </option>
         </b-select>
       </b-field>
