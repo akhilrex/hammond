@@ -67,9 +67,9 @@ const numberFormats = {
   }
 
 const i18n = new VueI18n({
-    locale: 'de-DE', // set locale
-    fallbackLocale: 'en-US',
-    messages: loadLocaleMessages(), // set locale messages
+    locale: navigator.language.split('-')[0] || 'en',
+    fallbackLocale: 'en',
+    messages: loadLocaleMessages(),
     numberFormats,
     dateTimeFormats
 });
