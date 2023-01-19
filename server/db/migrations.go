@@ -24,8 +24,8 @@ var migrations = []localMigration{
 
 	},
 	{
-	Name:  "2022_03_08_13_16_AddVIN",
-	Query: "ALTER TABLE vehicles ADD COLUMN vin text",
+		Name:  "2022_03_08_13_16_AddVIN",
+		Query: "ALTER TABLE vehicles ADD COLUMN vin text",
 	},
 }
 
