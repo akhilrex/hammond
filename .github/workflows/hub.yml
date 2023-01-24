@@ -38,8 +38,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -52,7 +52,7 @@ jobs:
           # cache-from: type=local,src=/tmp/.buildx-cache
           # cache-to: type=local,dest=/tmp/.buildx-cache
           tags: |
-            akhilrex/hammond:latest
-            akhilrex/hammond:${{ steps.get_tag.outputs.TAG }}
-            ghcr.io/akhilrex/hammond:latest
-            ghcr.io/akhilrex/hammond:${{ steps.get_tag.outputs.TAG }}
+            alfhou/hammond:latest
+            alfhou/hammond:${{ steps.get_tag.outputs.TAG }}
+            ghcr.io/alfhou/hammond:latest
+            ghcr.io/alfhou/hammond:${{ steps.get_tag.outputs.TAG }}
