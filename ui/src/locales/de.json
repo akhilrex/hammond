@@ -133,6 +133,7 @@
     "showunprocessed": "Zeige unbearbeitete",
     "unprocessed": "unbearbeitet",
     "sitesettingdesc": "Ändere die globalen Einstellungen. Diese werden als Standard für neue Benutzer verwendet.",
+    "settingdesc": "Diese Einstellungen werden als Standard verwendet wenn du eine neue Ausgabe oder eine Tankfüllung erfasst.",
     "areyousure": "Bist du dir sicher?",
     "adduser": "Benutzer hinzufügen",
     "usercreatedsuccessfully": "Benutzer erfolgreich gespeichert",

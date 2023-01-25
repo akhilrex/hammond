@@ -137,7 +137,7 @@ export default {
       ><div class="column">
         <form class="box " @submit.prevent="saveSettings">
           <h1 class="subtitle">
-            These will be used as default values whenever you create a new fillup or expense.
+            {{ $t('settingdesc') }}
           </h1>
           <b-field :label="$t('currency')">
             <b-autocomplete

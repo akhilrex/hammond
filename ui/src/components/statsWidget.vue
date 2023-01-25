@@ -32,15 +32,15 @@ export default {
         return [
           [
             {
-              label: 'Total Expenditure',
+              label: this.$t('totalexpenses'),
               value: this.formatCurrency(0, this.user.currency),
             },
             {
-              label: 'Fillup Costs',
+              label: this.$t('fillupcost'),
               value: `${this.formatCurrency(0, this.user.currency)} (0)`,
             },
             {
-              label: 'Other Expenses',
+              label: this.$t('otherexpenses'),
               value: `${this.formatCurrency(0, this.user.currency)} (0)`,
             },
           ],
