@@ -34,7 +34,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/vue-fontawesome": "0.1.9",
-    "axios": "^0.27.0",
+    "axios": "^0.27.2",
     "buefy": "^0.9.7",
     "chart.js": "^2.9.4",
     "core-js": "3.6.4",

@@ -1,8 +1,8 @@
-name: ci
+name: Build docker image
 
 on:
-  push:
-    branches: master
+  release:
+    types: [published]
 
 jobs:
   multi:
@@ -26,6 +26,9 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
+      - name: Parse the git tag
+        id: get_tag
+        run: echo ::set-output name=TAG::$(echo $GITHUB_REF | cut -d / -f 3)
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -50,6 +53,6 @@ jobs:
           # cache-to: type=local,dest=/tmp/.buildx-cache
           tags: |
             akhilrex/hammond:latest
-            akhilrex/hammond:1.0.0
+            akhilrex/hammond:${{ steps.get_tag.outputs.TAG }}
             ghcr.io/akhilrex/hammond:latest
-            ghcr.io/akhilrex/hammond:1.0.0
+            ghcr.io/akhilrex/hammond:${{ steps.get_tag.outputs.TAG }}
