@@ -26,7 +26,7 @@ Following steps will only work if Go and Node are installed and configured prope
 ## Clone from Git
 
 ``` bash
-git clone --depth 1 https://github.com/akhilrex/hammond
+git clone --depth 1 https://github.com/alfhou/hammond
 ```
 
 ## Build and Copy dependencies
@@ -110,7 +110,7 @@ sudo systemctl stop hammond.service
 ## Clone from Git
 
 ``` bash
-git clone --depth 1 https://github.com/akhilrex/hammond
+git clone --depth 1 https://github.com/alfhou/hammond
 ```
 
 ## Build and Copy dependencies
