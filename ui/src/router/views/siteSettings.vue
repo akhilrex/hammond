@@ -37,7 +37,7 @@ export default {
         .dispatch(`utils/saveSettings`, { settings: this.settingsModel })
         .then((data) => {
           this.$buefy.toast.open({
-            message: 'Settings saved successfully',
+            message: this.$t('settingssaved'),
             type: 'is-success',
             duration: 3000,
           })
@@ -63,32 +63,32 @@ export default {
     <div class="">
       <div class="columns">
         <div class="column">
-          <h1 class="title">Site Settings</h1>
+          <h1 class="title">{{ $t('menu.sitesettings') }}</h1>
           <h1 class="subtitle">
-            Update site level settings. These will be used as default values for new users.
+            {{ $t('sitesettingdesc') }}
           </h1>
         </div>
       </div>
     </div>
     <br />
     <form class="" @submit.prevent="saveSettings">
-      <b-field label="Currency">
-        <b-select v-model="settingsModel.currency" placeholder="Currency" required expanded>
+      <b-field :label="this.$t('currency')">
+        <b-select v-model="settingsModel.currency" :placeholder="this.$t('currency')" required expanded>
           <option v-for="option in currencyMasters" :key="option.code" :value="option.code">
             {{ `${option.namePlural} (${option.code})` }}
           </option>
         </b-select>
       </b-field>
-      <b-field label="Distance Unit">
-        <b-select v-model.number="settingsModel.distanceUnit" placeholder="Distance Unit" required expanded>
+      <b-field :label="this.$t('distanceunit')">
+        <b-select v-model.number="settingsModel.distanceUnit" :placeholder="this.$t('distanceunit')" required expanded>
           <option v-for="(option, key) in distanceUnitMasters" :key="key" :value="key">
-            {{ `${option.long} (${option.short})` }}
+            {{ `${$t('unit.long.' + option.key)} (${$t('unit.short.' + option.key)})` }}
           </option>
         </b-select>
       </b-field>
       <br />
       <b-field>
-        <b-button tag="input" native-type="submit" :disabled="tryingToSave" type="is-primary" value="Save" expanded> </b-button>
+        <b-button tag="input" native-type="submit" :disabled="tryingToSave" type="is-primary" :value="this.$t('save')" expanded> </b-button>
       </b-field>
     </form>
   </Layout>

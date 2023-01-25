@@ -41,7 +41,7 @@ export default {
       store.dispatch('vehicles/setQuickEntryAsProcessed', { id: entry.id }).then((data) => {})
     },
     deleteQuickEntry(entry) {
-      var sure = confirm('This will delete this Quick Entry. This step cannot be reversed. Are you sure?')
+      var sure = confirm(this.$t('deletequickentry'))
       if (sure) {
         store.dispatch('vehicles/deleteQuickEntry', { id: entry.id }).then((data) => {})
       }
@@ -59,9 +59,9 @@ export default {
 
 <template>
   <Layout>
-    <h1 class="title">Quick Entries</h1>
+    <h1 class="title">{{ $tc('quickentry', 2) }}</h1>
     <b-field>
-      <b-switch v-if="unprocessedQuickEntries.length" v-model="showUnprocessedOnly">Show unprocessed only</b-switch>
+      <b-switch v-if="unprocessedQuickEntries.length" v-model="showUnprocessedOnly">{{ $t('showunprocessed') }}</b-switch>
     </b-field>
     <div v-for="(chunk, index) in chunkedQuickEntries" :key="index" class="tile is-ancestor">
       <div v-for="entry in chunk" :key="entry.id" class="tile is-parent" :class="{ 'is-4': quickEntries.length <= 3 }">
@@ -71,7 +71,7 @@ export default {
               <div class="card-header-title">
                 {{ parseAndFormatDateTime(entry.createdAt) }}
               </div>
-              <b-tag v-if="entry.processDate === null" class="is-align-content-center" type="is-primary">unprocessed</b-tag>
+              <b-tag v-if="entry.processDate === null" class="is-align-content-center" type="is-primary">{{ $t('unprocessed') }}</b-tag>
             </div>
             <div class="card-image">
               <!-- prettier-ignore -->
@@ -87,22 +87,22 @@ export default {
             >
             <footer class="card-footer">
               <router-link v-if="entry.processDate === null && vehicles.length" :to="`/vehicles/${vehicles[0].id}/fillup`" class="card-footer-item"
-                >Create Fillup</router-link
+                >{{ $t('addfillup') }}</router-link
               >
               <router-link v-if="entry.processDate === null && vehicles.length" :to="`/vehicles/${vehicles[0].id}/expense`" class="card-footer-item"
-                >Create Expense</router-link
+                >{{ $t('addexpense') }}</router-link
               >
 
-              <a v-if="entry.processDate === null" class="card-footer-item" @click="markProcessed(entry)">Mark Processed</a>
-              <p v-else class="card-footer-item">Processed on {{ parseAndFormatDateTime(entry.processDate) }}</p>
-              <a class="card-footer-item" type="is-danger" @click="deleteQuickEntry(entry)"> Delete</a>
+              <a v-if="entry.processDate === null" class="card-footer-item" @click="markProcessed(entry)">{{ $t('processed') }}</a>
+              <p v-else class="card-footer-item">{{ $t('processedon') }} {{ parseAndFormatDateTime(entry.processDate) }}</p>
+              <a class="card-footer-item" type="is-danger" @click="deleteQuickEntry(entry)"> {{ $t('delete') }}</a>
             </footer>
           </div>
         </div>
       </div>
     </div>
     <div v-if="!quickEntries.length" class="box">
-      <p>No Quick Entries right now.</p>
+      <p>{{ $tc('quickentry',0) }}</p>
     </div>
   </Layout>
 </template>
