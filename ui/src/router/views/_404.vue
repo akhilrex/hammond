@@ -23,7 +23,7 @@ export default {
       <template v-if="resource">
         {{ resource }}
       </template>
-      Not Found
+      {{ $t('notfound') }}
     </h1>
   </Layout>
 </template>

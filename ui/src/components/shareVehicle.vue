@@ -55,7 +55,7 @@ export default {
         return
       }
       this.$buefy.dialog.confirm({
-        title: 'Transfer Vehicle',
+        title: this.$t('transfervehicle'),
         message: 'Are you sure you want to do this? You will lose ownership and all editing rights if you confirm.',
         cancelText: 'Cancel',
         confirmText: 'Go Ahead',
@@ -90,7 +90,7 @@ export default {
 
 <template>
   <div class="box" style="max-width:600px">
-    <h1 class="subtitle">Share {{ vehicle.nickname }}</h1>
+    <h1 class="subtitle">{{ $t('share') }} {{ vehicle.nickname }}</h1>
     <section>
       <div class="columns is-mobile" v-for="model in models" :key="model.id">
         <div class="column is-one-third">
@@ -101,7 +101,7 @@ export default {
           </b-field> </div
         ><div class="column is-three-quarters">
           <b-field>
-            <b-button v-if="model.isShared && !model.isOwner" type="is-primary is-small" @click="transferVehicle(model)">Make Owner</b-button>
+            <b-button v-if="model.isShared && !model.isOwner" type="is-primary is-small" @click="transferVehicle(model)">{{ $t('makeowner') }}</b-button>
           </b-field></div
         ></div
       >

@@ -24,8 +24,8 @@ export default {
       return process.env.NODE_ENV === 'production'
         ? {}
         : {
-            username: 'Enter your username',
-            password: 'Enter your password',
+            username: this.$t('enterusername'),
+            password: this.$t('enterpassword'),
           }
     },
   },
@@ -67,17 +67,17 @@ export default {
 <template>
   <Layout>
     <form @submit.prevent="tryToLogIn">
-      <b-field label="Email"> <b-input v-model="username" tag="b-input" name="username" type="email" :placeholder="placeholders.username"/></b-field>
-      <b-field label="Password">
+      <b-field :label="$t('email')"> <b-input v-model="username" tag="b-input" name="username" type="email" :placeholder="placeholders.username"/></b-field>
+      <b-field :label="$t('password')">
         <b-input v-model="password" tag="b-input" name="password" type="password" :placeholder="placeholders.password" />
       </b-field>
-      <b-button tag="input" native-type="submit" :disabled="tryingToLogIn" type="is-primary">
+      <b-button tag="input" native-type="submit" :value="$t('login')" :disabled="tryingToLogIn" type="is-primary">
         <BaseIcon v-if="tryingToLogIn" name="sync" spin />
         <span v-else>
-          Log in
+          {{ $t('login') }}
         </span>
       </b-button>
-      <p v-if="authError"> There was an error logging in to your account. {{ errorMessage }} </p>
+      <p v-if="authError"> {{ $t('loginerror', { msg: errorMessage }) }}</p>
     </form>
   </Layout>
 </template>

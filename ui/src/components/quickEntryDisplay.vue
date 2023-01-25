@@ -50,12 +50,12 @@ export default {
       <b-select
         v-if="unprocessedQuickEntries.length"
         v-model="quickEntry"
-        placeholder="Refer quick entry"
+        :placeholder="this.$t('referquickentry')"
         expanded
         @input="showQuickEntry($event)"
       >
         <option v-for="option in unprocessedQuickEntries" :key="option.id" :value="option">
-          Taken: {{ parseAndFormatDateTime(option.createdAt) }}
+          {{ $t('created') }}: {{ parseAndFormatDateTime(option.createdAt) }}
         </option>
       </b-select>
       <p class="control">

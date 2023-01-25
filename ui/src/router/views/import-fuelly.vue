@@ -14,13 +14,13 @@ export default {
     uploadButtonLabel() {
       if (this.isMobile) {
         if (this.file == null) {
-          return 'Choose Photo'
+          return this.$t('choosephoto')
         } else {
           return ''
         }
       } else {
         if (this.file == null) {
-          return 'Choose CSV'
+          return this.$t('choosecsv')
         } else {
           return ''
         }
@@ -53,7 +53,7 @@ export default {
         .post(`/api/import/fuelly`, formData)
         .then((data) => {
           this.$buefy.toast.open({
-            message: 'Data Imported Successfully',
+            message: this.$t('importsuccessfull'),
             type: 'is-success',
             duration: 3000,
           })
@@ -62,7 +62,7 @@ export default {
         .catch((ex) => {
           this.$buefy.toast.open({
             duration: 5000,
-            message: 'There was some issue with importing the file. Please check the error message',
+            message: this.$t('importerror'),
             position: 'is-bottom',
             type: 'is-danger',
           })
@@ -82,33 +82,27 @@ export default {
   <Layout>
     <div class="columns box">
       <div class="column">
-        <h1 class="title">Import from Fuelly</h1>
+        <h1 class="title">{{ $t('importfrom', { 'name': 'Fuelly' }) }}</h1>
       </div>
     </div>
     <br />
     <div class="columns">
       <div class="column">
-        <p class="subtitle"> Steps to import data from Fuelly</p>
+        <p class="subtitle"> {{ $t('stepstoimport', { 'name': 'Fuelly' }) }}</p>
         <ol>
-          <li
-            >Export your data from Fuelly in the CSV format. Steps to do that can be found
-            <a href="http://docs.fuelly.com/acar-import-export-center" target="_nofollow">here</a>.</li
-          >
-          <li>Make sure that you have already created the vehicles in Hammond platform.</li>
-          <li>Make sure that the Vehicle nickname in Hammond is exactly the same as the name on Fuelly CSV or the import will not work.</li>
-          <li
-            >Make sure that the <u>Currency</u> and <u>Distance Unit</u> are set correctly in Hammond. Import will not autodetect Currency from the
-            CSV but use the one set for the user.</li
-          >
-          <li>Similiarly, make sure that the <u>Fuel Unit</u> and <u>Fuel Type</u> are correctly set in the Vehicle.</li>
-          <li>Once you have checked all these points,just import the CSV below.</li>
-          <li><b>Make sure that you do not import the file again and that will create repeat entries.</b></li>
+          <li>{{ $t('importhintcreatecsv', { 'name': 'Fuelly' }) }} <a href="http://docs.fuelly.com/acar-import-export-center" target="_nofollow">{{ $t('here') }}</a>.</li>
+          <li>{{ $t('importhintvehiclecreated') }}</li>
+          <li>{{ $t('importhintnickname') }}</li>
+          <li v-html="$t('importhintcurrdist')"></li>
+          <li v-html="$t('importhintunits')"></li>
+          <li>{{ $t('checkpointsimportcsv') }}</li>
+          <li><b>{{ $t('dontimportagain') }}</b></li>
         </ol>
       </div>
     </div>
     <div class="section box">
       <div class="columns">
-        <div class="column is-two-thirds"> <p class="subtitle">Choose the Fuelly CSV and press the import button.</p></div>
+        <div class="column is-two-thirds"> <p class="subtitle">{{ $t('choosecsvimport', { 'name': 'Fuelly' }) }}</p></div>
         <div class="column is-one-third is-flex is-align-content-center">
           <form @submit.prevent="importFuelly">
             <div class="columns"
@@ -126,8 +120,8 @@ export default {
                 </b-field>
               </div>
               <div class="column">
-                <b-button tag="input" native-type="submit" :disabled="tryingToCreate" type="is-primary" value="Upload File" class="control">
-                  Import
+                <b-button tag="input" native-type="submit" :disabled="tryingToCreate" type="is-primary" :value="this.$t('uploadfile')" class="control">
+                  {{ $t('import') }}
                 </b-button>
               </div></div
             >
