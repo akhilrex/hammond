@@ -185,7 +185,8 @@ export default {
           </b-field>
           <p v-if="!passwordValid" class="help is-danger">{{ $t('passworddontmatch') }}</p>
           <b-field>
-            <b-button tag="input" native-type="submit" :disabled="!passwordValid" type="is-primary" :value="$t('changepassword')" expanded> </b-button>
+            <b-button tag="input" native-type="submit" :disabled="!passwordValid" type="is-primary" :value="$t('changepassword')" expanded>
+            </b-button>
           </b-field>
         </form>
       </div>
@@ -194,12 +195,6 @@ export default {
     <div class="columns">
       <div class="twelve">
         <h3 class="title">{{ $t('moreinfo') }}</h3>
-        <p style="font-style: italic;">
-          This project is under active development which means I release new updates very frequently. I will eventually build the version
-          management/update checking mechanism. Until then it is recommended that you use something like watchtower which will automatically update
-          your containers whenever I release a new version or periodically rebuild the container with the latest image manually.
-        </p>
-        <br />
         <table class="table is-hoverable">
           <tr>
             <td>{{ $t('currentversion') }}</td>
@@ -207,15 +202,12 @@ export default {
           </tr>
           <tr>
             <td>Website</td>
-            <td><a href="https://github.com/akhilrex/hammond" target="_blank">https://github.com/akhilrex/hammond</a></td>
+            <td><a href="https://github.com/alfhou/hammond" target="_blank">https://github.com/alfhou/hammond</a></td>
           </tr>
           <tr>
             <td>{{ $t('foundabug') }}</td>
             <td
-              ><a
-                href="https://github.com/akhilrex/hammond/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
-                target="_blank"
-                rel="noopener noreferrer"
+              ><a href="https://github.com/alfhou/hammond/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc" target="_blank" rel="noopener noreferrer"
                 >Report here</a
               ></td
             >
@@ -223,17 +215,10 @@ export default {
           <tr>
             <td>{{ $t('featurerequest') }}</td>
             <td
-              ><a
-                href="https://github.com/akhilrex/hammond/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
-                target="_blank"
-                rel="noopener noreferrer"
+              ><a href="https://github.com/alfhou/hammond/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc" target="_blank" rel="noopener noreferrer"
                 >Request here</a
               ></td
             >
-          </tr>
-          <tr>
-            <td>{{ $t('supportthedeveloper') }}</td>
-            <td><a href="https://www.buymeacoffee.com/akhilrex" target="_blank" rel="noopener noreferrer">{{ $t('buyhimabeer') }}</a></td>
           </tr>
         </table>
       </div>
