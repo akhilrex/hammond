@@ -159,7 +159,7 @@
     "novehicles": "Du hast noch kein Fahrzeug erstellt. Lege jetzt einen Eintrag für das zu Verwaltende Auto an.",
     "processed": "Bearbeitet",
     "notfound": "Nicht gefunden",
-    "timeout": "The page timed out while loading. Are you sure you're still connected to\nthe Internet?",
+    "timeout": "Das Laden der Seite hat eine Zeitüberschreitung verursacht. Bist du sicher, dass du noch mit dem Internet verbunden bist?",
     "clicktoselect": "Klicke zum auswählen...",
     "expenseby": "Ausgabe von",
     "selectvehicle": "Wähle ein Fahrzeug aus",
