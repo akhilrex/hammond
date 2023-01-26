@@ -16,7 +16,7 @@ RUN go build -o ./app ./main.go
 
 FROM alpine:latest
 
-LABEL org.opencontainers.image.source="https://github.com/akhilrex/hammond"
+LABEL org.opencontainers.image.source="https://github.com/alfhou/hammond"
 
 ENV CONFIG=/config
 ENV DATA=/assets

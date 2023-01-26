@@ -18,7 +18,7 @@ RUN npm run build
 
 
 FROM alpine:latest
-LABEL org.opencontainers.image.source="https://github.com/akhilrex/hammond"
+LABEL org.opencontainers.image.source="https://github.com/alfhou/hammond"
 ENV CONFIG=/config
 ENV DATA=/assets
 ENV UID=998
