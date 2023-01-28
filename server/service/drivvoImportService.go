@@ -103,7 +103,7 @@ func DrivvoParseRefuelings(content []byte, user *db.User, vehicle *db.Vehicle, i
 
 		pricePerUnit, err := strconv.ParseFloat(record[3], 32)
 		if err != nil {
-			unit := strings.ToLower(db.FuelUnitDetails[vehicle.FuelUnit].Long)
+			unit := strings.ToLower(db.FuelUnitDetails[vehicle.FuelUnit].Key)
 			errors = append(errors, fmt.Sprintf("Found an invalid cost per %s at refuel row %d", unit, index+1))
 		}
 
