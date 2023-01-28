@@ -1,10 +1,10 @@
 version: "2.1"
 services:
   hammond:
-    image: akhilrex/hammond
+    image: alfhou/hammond
     container_name: hammond
     environment:
-      - JWT_SECRET = somethingverystrong
+      - JWT_SECRET=somethingverystrong
     volumes:
       - /path/to/config:/config
       - /path/to/data:/assets

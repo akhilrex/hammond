@@ -25,6 +25,33 @@ func RandString(n int) string {
 	return string(b)
 }
 
+// A helper to convert from litres to gallon
+func LitreToGallon(litres float32) float32 {
+	gallonConversionFactor :=  0.21997
+	return litres * float32(gallonConversionFactor);
+}
+
+// A helper to convert from gallon to litres
+func GallonToLitre(gallons float32) float32 {
+	litreConversionFactor :=  3.785412
+	return gallons * float32(litreConversionFactor);
+}
+
+
+// A helper to convert from km to miles
+func KmToMiles(km float32) float32 {
+	kmConversionFactor :=  0.62137119
+	return km * float32(kmConversionFactor);
+}
+
+// A helper to convert from miles to km
+func MilesToKm(miles float32) float32 {
+	milesConversionFactor := 1.609344
+	return miles * float32(milesConversionFactor);
+}
+
+
+
 // A Util function to generate jwt_token which can be used in the request header
 func GenToken(id string, role db.Role) (string, string) {
 	jwt_token := jwt.New(jwt.GetSigningMethod("HS256"))

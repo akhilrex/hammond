@@ -12,6 +12,10 @@
 *.out
 *.db
 
+# MS VSCode
+.vscode
+__debug_bin
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
 assets/*

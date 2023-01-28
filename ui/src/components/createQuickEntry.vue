@@ -20,7 +20,7 @@ export default {
         }
       } else {
         if (this.file == null) {
-          return 'Upload Photo'
+          return this.$t('uploadphoto')
         } else {
           return ''
         }
@@ -39,7 +39,7 @@ export default {
         .post(`/api/quickEntries`, formData)
         .then((data) => {
           this.$buefy.toast.open({
-            message: 'Quick Entry Created Successfully',
+            message: this.$t('quickentrycreatedsuccessfully'),
             type: 'is-success',
             duration: 3000,
           })
@@ -68,9 +68,9 @@ export default {
   <div class="section box">
     <div class="columns">
       <div class="column is-two-thirds">
-        <p class="title">Quick Entry</p>
+        <p class="title">{{ $tc('quickentry',1) }}</p>
         <p class="subtitle"
-          >Take a pic of the invoice or the fuel pump display to make an entry later.</p
+          >{{ $t('quickentrydesc') }}</p
         ></div
       >
       <div class="column is-one-third is-flex is-align-content-center">
@@ -99,10 +99,10 @@ export default {
                 native-type="submit"
                 :disabled="tryingToCreate"
                 type="is-primary"
-                value="Upload File"
+                :value="this.$t('uploadfile')"
                 class="control"
               >
-                Upload File
+                {{ $t('uploadfile') }}
               </b-button>
             </div></div
           >

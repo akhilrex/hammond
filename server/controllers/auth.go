@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/akhilrex/hammond/common"
 	"github.com/akhilrex/hammond/db"
@@ -91,20 +92,20 @@ func userLogin(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 		return
 	}
-	user, err := db.FindOneUser(&db.User{Email: loginRequest.Email})
+	user, err := db.FindOneUser(&db.User{Email: strings.ToLower(loginRequest.Email)})
 
 	if err != nil {
-		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("Not Registered email or invalid password")))
+		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("not Registered email or invalid password")))
 		return
 	}
 
 	if user.CheckPassword(loginRequest.Password) != nil {
-		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("Not Registered email or invalid password")))
+		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("not Registered email or invalid password")))
 		return
 	}
 
 	if user.IsDisabled {
-		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("Your user has been disabled by the admin. Please contact them to get it re-enabled.")))
+		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("your user has been disabled by the admin. Please contact them to get it re-enabled")))
 		return
 	}
 	UpdateContextUserModel(c, user.ID)
@@ -114,7 +115,7 @@ func userLogin(c *gin.Context) {
 		Email:        user.Email,
 		Token:        token,
 		RefreshToken: refreshToken,
-		Role:         user.RoleDetail().Long,
+		Role:         user.RoleDetail().Key,
 	}
 	c.JSON(http.StatusOK, response)
 }
@@ -148,7 +149,7 @@ func refresh(c *gin.Context) {
 				Email:        user.Email,
 				Token:        token,
 				RefreshToken: refreshToken,
-				Role:         user.RoleDetail().Long,
+				Role:         user.RoleDetail().Key,
 			}
 			c.JSON(http.StatusOK, response)
 		} else {
@@ -170,16 +171,16 @@ func changePassword(c *gin.Context) {
 	user, err := service.GetUserById(c.GetString("userId"))
 
 	if err != nil {
-		c.JSON(http.StatusForbidden, common.NewError("changePassword", errors.New("Not Registered email or invalid password")))
+		c.JSON(http.StatusForbidden, common.NewError("changePassword", errors.New("not Registered email or invalid password")))
 		return
 	}
 
 	if user.CheckPassword(request.OldPassword) != nil {
-		c.JSON(http.StatusForbidden, common.NewError("changePassword", errors.New("Incorrect old password")))
+		c.JSON(http.StatusForbidden, common.NewError("changePassword", errors.New("incorrect old password")))
 		return
 	}
 
 	user.SetPassword(request.NewPassword)
-	success, err := service.UpdatePassword(user.ID, request.NewPassword)
+	success, _ := service.UpdatePassword(user.ID, request.NewPassword)
 	c.JSON(http.StatusOK, success)
 }

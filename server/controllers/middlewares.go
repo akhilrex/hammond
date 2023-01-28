@@ -23,8 +23,8 @@ func stripBearerPrefixFromTokenString(tok string) (string, error) {
 // Extract  token from Authorization header
 // Uses PostExtractionFilter to strip "TOKEN " prefix from header
 var AuthorizationHeaderExtractor = &request.PostExtractionFilter{
-	request.HeaderExtractor{"Authorization"},
-	stripBearerPrefixFromTokenString,
+	Extractor: request.HeaderExtractor{"Authorization"},
+	Filter:    stripBearerPrefixFromTokenString,
 }
 
 // Extractor for OAuth2 access tokens.  Looks in 'Authorization'

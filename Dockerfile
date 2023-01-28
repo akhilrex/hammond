@@ -9,7 +9,7 @@ RUN go mod download
 COPY ./server .
 RUN go build -o ./app ./main.go
 
-FROM node:latest as build-stage
+FROM node:14 as build-stage
 WORKDIR /app
 COPY ./ui/package*.json ./
 RUN npm install
@@ -18,7 +18,7 @@ RUN npm run build
 
 
 FROM alpine:latest
-LABEL org.opencontainers.image.source="https://github.com/akhilrex/hammond"
+LABEL org.opencontainers.image.source="https://github.com/alfhou/hammond"
 ENV CONFIG=/config
 ENV DATA=/assets
 ENV UID=998

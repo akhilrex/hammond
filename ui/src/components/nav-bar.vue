@@ -10,42 +10,42 @@ export default {
       persistentNavRoutes: [
         {
           name: 'home',
-          title: 'Home',
+          title: this.$t('menu.home'),
         },
       ],
       loggedInNavRoutes: [
         {
           name: 'quickEntries',
-          title: () => 'Quick Entries',
+          title: () => this.$t('menu.quickentries'),
           badge: () => this.unprocessedQuickEntries.length,
         },
         {
           name: 'import',
-          title: () => 'Import',
+          title: () => this.$t('menu.import'),
         },
         {
           name: 'settings',
-          title: 'Settings',
+          title: this.$t('menu.settings'),
         },
         {
           name: 'logout',
-          title: 'Log out',
+          title: this.$t('menu.logout'),
         },
       ],
       loggedOutNavRoutes: [
         {
           name: 'login',
-          title: 'Log in',
+          title: this.$t('menu.login'),
         },
       ],
       adminNavRoutes: [
         {
           name: 'site-settings',
-          title: 'Site Settings',
+          title: this.$t('menu.sitesettings'),
         },
         {
           name: 'users',
-          title: 'Users',
+          title: this.$t('menu.users'),
         },
       ],
     }
@@ -72,7 +72,7 @@ export default {
         <NavBarRoutes :routes="persistentNavRoutes" />
         <NavBarRoutes v-if="loggedIn" :routes="loggedInNavRoutes" />
         <NavBarRoutes v-else :routes="loggedOutNavRoutes" />
-        <b-navbar-dropdown v-if="loggedIn && isAdmin" label="Admin">
+        <b-navbar-dropdown v-if="loggedIn && isAdmin" :label="$t('menu.admin')">
           <NavBarRoutes :routes="adminNavRoutes" />
         </b-navbar-dropdown>
       </template>
