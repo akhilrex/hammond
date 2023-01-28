@@ -58,6 +58,7 @@ export default {
             duration: 3000,
           })
           this.file = null
+          setTimeout(() => this.$router.push({ name: 'home' }), 1000)
         })
         .catch((ex) => {
           this.$buefy.toast.open({
@@ -108,7 +109,7 @@ export default {
             <div class="columns"
               ><div class="column">
                 <b-field class="file is-primary" :class="{ 'has-name': !!file }">
-                  <b-upload v-model="file" class="file-label" accept=".csv">
+                  <b-upload v-model="file" class="file-label" accept=".csv" required>
                     <span class="file-cta">
                       <b-icon class="file-icon" icon="upload"></b-icon>
                       <span class="file-label">{{ uploadButtonLabel }}</span>

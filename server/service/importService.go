@@ -2,144 +2,12 @@ package service
 
 import (
 	"bytes"
-	"encoding/csv"
-	"fmt"
-	"strconv"
-	"time"
 
 	"github.com/akhilrex/hammond/db"
-	"github.com/leekchan/accounting"
 )
 
-func FuellyImport(content []byte, userId string) []string {
-	stream := bytes.NewReader(content)
-	reader := csv.NewReader(stream)
-	records, err := reader.ReadAll()
-
+func WriteToDB(fillups []db.Fillup, expenses []db.Expense) []string {
 	var errors []string
-	if err != nil {
-		errors = append(errors, err.Error())
-		return errors
-	}
-
-	vehicles, err := GetUserVehicles(userId)
-	if err != nil {
-		errors = append(errors, err.Error())
-		return errors
-	}
-	user, err := GetUserById(userId)
-
-	if err != nil {
-		errors = append(errors, err.Error())
-		return errors
-	}
-
-	var vehicleMap map[string]db.Vehicle = make(map[string]db.Vehicle)
-	for _, vehicle := range *vehicles {
-		vehicleMap[vehicle.Nickname] = vehicle
-	}
-
-	var fillups []db.Fillup
-	var expenses []db.Expense
-	layout := "2006-01-02 15:04"
-	altLayout := "2006-01-02 3:04 PM"
-
-	for index, record := range records {
-		if index == 0 {
-			continue
-		}
-
-		var vehicle db.Vehicle
-		var ok bool
-		if vehicle, ok = vehicleMap[record[4]]; !ok {
-			errors = append(errors, "Found an unmapped vehicle entry at row "+strconv.Itoa(index+1))
-		}
-		dateStr := record[2] + " " + record[3]
-		date, err := time.Parse(layout, dateStr)
-		if err != nil {
-			date, err = time.Parse(altLayout, dateStr)
-		}
-		if err != nil {
-			errors = append(errors, "Found an invalid date/time at row "+strconv.Itoa(index+1))
-		}
-
-		totalCostStr := accounting.UnformatNumber(record[9], 3, user.Currency)
-		totalCost64, err := strconv.ParseFloat(totalCostStr, 32)
-		if err != nil {
-			errors = append(errors, "Found an invalid total cost at row "+strconv.Itoa(index+1))
-		}
-
-		totalCost := float32(totalCost64)
-		odoStr := accounting.UnformatNumber(record[5], 0, user.Currency)
-		odoreading, err := strconv.Atoi(odoStr)
-		if err != nil {
-			errors = append(errors, "Found an invalid odo reading at row "+strconv.Itoa(index+1))
-		}
-		location := record[12]
-
-		//Create Fillup
-		if record[0] == "Gas" {
-			rateStr := accounting.UnformatNumber(record[7], 3, user.Currency)
-			ratet64, err := strconv.ParseFloat(rateStr, 32)
-			if err != nil {
-				errors = append(errors, "Found an invalid cost per gallon at row "+strconv.Itoa(index+1))
-			}
-			rate := float32(ratet64)
-
-			quantity64, err := strconv.ParseFloat(record[8], 32)
-			if err != nil {
-				errors = append(errors, "Found an invalid quantity at row "+strconv.Itoa(index+1))
-			}
-			quantity := float32(quantity64)
-
-			notes := fmt.Sprintf("Octane:%s\nGas Brand:%s\nLocation%s\nTags:%s\nPayment Type:%s\nTire Pressure:%s\nNotes:%s\nMPG:%s",
-				record[10], record[11], record[12], record[13], record[14], record[15], record[16], record[1],
-			)
-
-			isTankFull := record[6] == "Full"
-			fal := false
-			fillups = append(fillups, db.Fillup{
-				VehicleID:       vehicle.ID,
-				FuelUnit:        vehicle.FuelUnit,
-				FuelQuantity:    quantity,
-				PerUnitPrice:    rate,
-				TotalAmount:     totalCost,
-				OdoReading:      odoreading,
-				IsTankFull:      &isTankFull,
-				Comments:        notes,
-				FillingStation:  location,
-				HasMissedFillup: &fal,
-				UserID:          userId,
-				Date:            date,
-				Currency:        user.Currency,
-				DistanceUnit:    user.DistanceUnit,
-				Source:          "Fuelly",
-			})
-
-		}
-		if record[0] == "Service" {
-			notes := fmt.Sprintf("Tags:%s\nPayment Type:%s\nNotes:%s",
-				record[13], record[14], record[16],
-			)
-			expenses = append(expenses, db.Expense{
-				VehicleID:    vehicle.ID,
-				Amount:       totalCost,
-				OdoReading:   odoreading,
-				Comments:     notes,
-				ExpenseType:  record[17],
-				UserID:       userId,
-				Currency:     user.Currency,
-				Date:         date,
-				DistanceUnit: user.DistanceUnit,
-				Source:       "Fuelly",
-			})
-		}
-
-	}
-	if len(errors) != 0 {
-		return errors
-	}
-
 	tx := db.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -150,19 +18,90 @@ func FuellyImport(content []byte, userId string) []string {
 		errors = append(errors, err.Error())
 		return errors
 	}
-	if err := tx.Create(&fillups).Error; err != nil {
-		tx.Rollback()
-		errors = append(errors, err.Error())
-		return errors
+	if fillups != nil {
+		if err := tx.Create(&fillups).Error; err != nil {
+			tx.Rollback()
+			errors = append(errors, err.Error())
+			return errors
+		}
 	}
-	if err := tx.Create(&expenses).Error; err != nil {
-		tx.Rollback()
-		errors = append(errors, err.Error())
-		return errors
+	if expenses != nil {
+		if err := tx.Create(&expenses).Error; err != nil {
+			tx.Rollback()
+			errors = append(errors, err.Error())
+			return errors
+		}
 	}
-	err = tx.Commit().Error
+	err := tx.Commit().Error
 	if err != nil {
 		errors = append(errors, err.Error())
 	}
 	return errors
+
+}
+
+func DrivvoImport(content []byte, userId string, vehicleId string, importLocation bool) []string {
+	var errors []string
+	user, err := GetUserById(userId)
+	if err != nil {
+		errors = append(errors, err.Error())
+		return errors
+	}
+
+	vehicle, err := GetVehicleById(vehicleId)
+	if err != nil {
+		errors = append(errors, err.Error())
+		return errors
+	}
+
+	endParseIndex := bytes.Index(content, []byte("#Income"))
+	if endParseIndex == -1 {
+		endParseIndex = bytes.Index(content, []byte("#Route"))
+		if endParseIndex == -1 {
+			endParseIndex = len(content)
+		}
+
+	}
+
+	serviceEndIndex := bytes.Index(content, []byte("#Expense"))
+	if serviceEndIndex == -1 {
+		serviceEndIndex = endParseIndex
+	}
+
+	refuelEndIndex := bytes.Index(content, []byte("#Service"))
+	if refuelEndIndex == -1 {
+		refuelEndIndex = serviceEndIndex
+	}
+
+	var fillups []db.Fillup
+	fillups, errors = DrivvoParseRefuelings(content[:refuelEndIndex], user, vehicle, importLocation)
+
+	var allExpenses []db.Expense
+	services, parseErrors := DrivvoParseExpenses(content[refuelEndIndex:serviceEndIndex], user, vehicle)
+	if parseErrors != nil {
+		errors = append(errors, parseErrors...)
+	}
+	allExpenses = append(allExpenses, services...)
+
+	expenses, parseErrors := DrivvoParseExpenses(content[serviceEndIndex:endParseIndex], user, vehicle)
+	if parseErrors != nil {
+		errors = append(errors, parseErrors...)
+	}
+
+	allExpenses = append(allExpenses, expenses...)
+
+	if len(errors) != 0 {
+		return errors
+	}
+
+	return WriteToDB(fillups, allExpenses)
+}
+
+func FuellyImport(content []byte, userId string) []string {
+	fillups, expenses, errors := FuellyParseAll(content, userId)
+	if len(errors) != 0 {
+		return errors
+	}
+
+	return WriteToDB(fillups, expenses)
 }
