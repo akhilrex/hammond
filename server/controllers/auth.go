@@ -115,7 +115,7 @@ func userLogin(c *gin.Context) {
 		Email:        user.Email,
 		Token:        token,
 		RefreshToken: refreshToken,
-		Role:         user.RoleDetail().Long,
+		Role:         user.RoleDetail().Key,
 	}
 	c.JSON(http.StatusOK, response)
 }
@@ -149,7 +149,7 @@ func refresh(c *gin.Context) {
 				Email:        user.Email,
 				Token:        token,
 				RefreshToken: refreshToken,
-				Role:         user.RoleDetail().Long,
+				Role:         user.RoleDetail().Key,
 			}
 			c.JSON(http.StatusOK, response)
 		} else {

@@ -32,8 +32,7 @@ export default {
 <template>
   <Layout v-if="offlineConfirmed">
     <h1 :class="$style.title">
-      The page timed out while loading. Are you sure you're still connected to
-      the Internet?
+      {{ $t('timeout') }}
     </h1>
   </Layout>
   <LoadingView v-else />

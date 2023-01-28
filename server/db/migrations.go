@@ -21,6 +21,11 @@ var migrations = []localMigration{
 	{
 		Name:  "2021_02_07_00_09_LowerCaseEmails",
 		Query: "update users set email=lower(email)",
+
+	},
+	{
+		Name:  "2022_03_08_13_16_AddVIN",
+		Query: "ALTER TABLE vehicles ADD COLUMN vin text",
 	},
 }
 
