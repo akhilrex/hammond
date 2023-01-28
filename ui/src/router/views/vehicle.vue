@@ -48,6 +48,12 @@ export default {
         { label: this.$t('alltime'), value: 'all_time' },
       ],
       dateRangeOption: 'past_30_days',
+      mileageOptions: [
+        { label: 'L/100km', value: 'litre_100km' },
+        { label: 'km/L', value: 'km_litre' },
+        { label: 'mpg', value: 'mpg' },
+      ],
+      mileageOption: 'litre_100km',
     }
   },
   computed: {
@@ -529,14 +535,25 @@ export default {
       <div class="columns">
         <div class="column" :class="isMobile ? 'has-text-centered' : ''"> <h1 class="title">{{ $t('statistics') }}</h1></div>
         <div class="column">
-          <b-select v-model="dateRangeOption" class="is-pulled-right is-medium">
-            <option v-for="option in dateRangeOptions" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </option>
-          </b-select></div
-        >
+          <div class="columns is-pulled-right is-medium">
+            <div class="column">
+              <b-select v-model="mileageOption">
+                <option v-for="option in mileageOptions" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </b-select>
+            </div>
+            <div class="column">
+              <b-select v-model="dateRangeOption">
+                <option v-for="option in dateRangeOptions" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </b-select>
+            </div>
+          </div>
+        </div>
       </div>
-      <MileageChart :vehicle="vehicle" :since="getStartDate()" :user="me" :height="300" />
+      <MileageChart :vehicle="vehicle" :since="getStartDate()" :user="me" :height="300" :mileage-option="mileageOption" />
     </div>
   </Layout>
 </template>
