@@ -140,7 +140,7 @@ export default {
       <b-field :label="this.$t('registration') + `*`">
         <b-input v-model="vehicleModel.registration" type="text" expanded required></b-input>
       </b-field>
-       <b-field label="VIN">
+      <b-field label="VIN">
         <b-input v-model="vehicleModel.vin" type="text" expanded></b-input>
       </b-field>
       <b-field :label="this.$t('fueltype') + `*`">
@@ -168,13 +168,21 @@ export default {
       <b-field :label="this.$t('yearmanufacture') + `*`">
         <b-input v-model.number="vehicleModel.yearOfManufacture" type="number" expanded number></b-input>
       </b-field>
-      <b-field :label="this.$t('yearmanufacture')">
+      <b-field :label="this.$t('enginesize')">
         <b-input v-model.number="vehicleModel.engineSize" type="number" expanded number></b-input>
       </b-field>
 
       <br />
       <b-field>
-        <b-button tag="input" native-type="submit" :disabled="tryingToCreate" type="is-primary" :value="this.$t('save')" :label="this.$t('createvehicle')" expanded>
+        <b-button
+          tag="input"
+          native-type="submit"
+          :disabled="tryingToCreate"
+          type="is-primary"
+          :value="this.$t('save')"
+          :label="this.$t('createvehicle')"
+          expanded
+        >
           <BaseIcon v-if="tryingToCreate" name="sync" spin />
         </b-button>
         <p v-if="authError">
