@@ -1,2 +1,4 @@
 # Don't track .vscode directory
 .vscode
+!.vscode/launch.json
+
